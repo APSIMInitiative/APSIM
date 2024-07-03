@@ -272,7 +272,19 @@ namespace Models.PMF.Organs
         {
             // Do Root Front Advance
             int RootLayer = SoilUtilities.LayerIndexOfDepth(Physical.Thickness, Depth);
-            var rootfrontvelocity = rootFrontVelocity.Value(RootLayer);
+            var rootfrontvelocity1 = rootFrontVelocity.Value(RootLayer);
+            int NextLayer = Math.Min(RootLayer + 1, Physical.Thickness.Length-1);
+            var rootfrontvelocity2 = rootFrontVelocity.Value(NextLayer);
+
+            double wf = 0; // weighting factor
+            if (RootLayer > 0)
+                wf = (Depth - Physical.ThicknessCumulative[RootLayer-1])/Physical.Thickness[RootLayer];
+            else
+                wf = Depth / Physical.Thickness[0];
+
+            
+
+            var rootfrontvelocity = wf * rootfrontvelocity2 + (1 - wf) * rootfrontvelocity1;
 
             double MaxDepth;
             double[] xf = null;
