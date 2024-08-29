@@ -13,7 +13,6 @@ using Models.Core.ApsimFile;
 using Models.Core.ConfigFile;
 using Models.Core.Run;
 using Models.Storage;
-using Models.Utilities.Extensions;
 
 namespace Models
 {
@@ -512,15 +511,9 @@ namespace Models
             }
 
             RunSimulations(runner, options);
+            //// An assumption is made here that once a simulation is run a temp file is no longer needed.
+            //// Release database files and clean up. 
             runner.DisposeStorage();
-
-            //dispose of temp datastore
-            if (tempSim != null)
-            {
-                DataStore ds = tempSim.FindDescendant<DataStore>();
-                if (ds != null)
-                    ds.Dispose();
-            }
         }
 
         /// <summary>
@@ -836,22 +829,44 @@ namespace Models
                 foreach (string match in Directory.GetFiles(configFileDirectoryPath, file))
                     if (match != null)
                         matchingTempFiles.Add(match);
-            
-            //give up trying to to delete the files if they are blocked for some reason.
-            int breakout = 100;
-            while (matchingTempFiles.Count > 0 && breakout > 0)
+            if (matchingTempFiles.Count > 0)
             {
-                for(int i = matchingTempFiles.Count-1; i >= 0; i --) 
+                foreach (string matchingFile in matchingTempFiles)
                 {
-                    isFileInUse = (new FileInfo(matchingTempFiles[i])).IsLocked();
-                    if (!isFileInUse)
-                    {
-                        File.Delete(matchingTempFiles[i]);
-                        matchingTempFiles.Remove(matchingTempFiles[i]);
-                    }
+                    while (isFileInUse == true)
+                        isFileInUse = IsFileLocked(matchingFile);
+                    File.Delete(matchingFile);
+                    isFileInUse = true;
                 }
-                breakout -= 1;
             }
+        }
+
+        /// <summary>
+        /// Closes file if in use and returns true otherwise returns false.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns>bool</returns>
+        private static bool IsFileLocked(string filePath)
+        {
+            try
+            {
+                var fileInfo = new FileInfo(filePath);
+                using (FileStream stream = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    stream.Close();
+                }
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+
+            //file is not locked
+            return false;
         }
 
         /// <summary>
