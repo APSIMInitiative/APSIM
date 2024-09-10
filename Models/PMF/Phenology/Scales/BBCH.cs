@@ -1,6 +1,7 @@
 ﻿using System;
 using APSIM.Shared.Utilities;
 using Models.Core;
+using Models.Functions;
 using Models.PMF.Organs;
 using Models.PMF.Struct;
 
@@ -47,20 +48,14 @@ namespace Models.PMF.Phen
         Phenology Phenology = null;
 
         /// <summary>
-        /// The Leaf class
+        /// The Simple Leaf class
         /// </summary>
         [Link]
-        Leaf leaf = null;
-
-        /// <summary>
-        /// The Structure class
-        /// </summary>
-        [Link]
-        Structure structure = null;
+        SimpleLeaf leaf = null;
 
         bool StemExtensionInitialised = false;
         bool TasselVisiable = false;
-        int ligulesAtStartStemExtension = 0;
+        double ligulesAtStartStemExtension = 0;
         double FractionInPhaseAtBBCH50 = 0;
 
         /// <summary>Gets the stage.</summary>
@@ -73,24 +68,31 @@ namespace Models.PMF.Phen
             {
                 double fracInCurrent = Phenology.FractionInCurrentPhase;
                 double BBCH_stage = 0.0;
+                double LeafTips = (leaf.FindChild("Tips") as IFunction).Value();
+                double LeafLigules = (leaf.FindChild("Ligules") as IFunction).Value();
+                double FinalLeafNumber = (leaf.FindChild("FinalLeafNumber") as IFunction).Value();
+
                 if (Phenology.InPhase("Germinating"))
                     BBCH_stage = 5.0f * fracInCurrent;
                 else if (Phenology.InPhase("Emerging"))
+                {
+
                     BBCH_stage = 5.0f + 5 * fracInCurrent;
+                }
                 else if (Phenology.InPhase("Juvenile") || Phenology.InPhase("PhotoSensitive"))
                 {
-                    BBCH_stage = Math.Min(19.0, 10.0f + Math.Max(0, leaf.AppearedCohortNo - 1));
+                    BBCH_stage = Math.Min(19.0, 10.0f + Math.Max(0, LeafTips - 1));
                 }
-                else if (Phenology.InPhase("LeafAppearance") && (leaf.AppearedCohortNo <= structure.finalLeafNumber.Value()))
+                else if (Phenology.InPhase("LeafAppearance") && (LeafTips <= FinalLeafNumber))
                 {
                     if (StemExtensionInitialised == false)
                     {
-                        ligulesAtStartStemExtension = leaf.ExpandedCohortNo;
+                        ligulesAtStartStemExtension = LeafLigules;
                         StemExtensionInitialised = true;
                     }
-                    BBCH_stage = 30.0f + Math.Min(9, leaf.ExpandedCohortNo - ligulesAtStartStemExtension);
+                    BBCH_stage = 30.0f + Math.Min(9, LeafLigules - ligulesAtStartStemExtension);
                 }
-                else if (Phenology.InPhase("LeafAppearance") && (leaf.AppearedCohortNo >= structure.finalLeafNumber.Value()))
+                else if (Phenology.InPhase("LeafAppearance") && (LeafTips >= FinalLeafNumber))
                 {
                     if (TasselVisiable == false)
                     {
