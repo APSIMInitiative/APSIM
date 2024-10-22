@@ -301,7 +301,7 @@ namespace UnitTests.Weather
                         new Models.Climate.SimpleWeather()
                         {
                             Name = "Weather",
-                            FileName = weatherFilePath,
+                            FullFileName = weatherFilePath,
                             ExcelWorkSheetName = ""
                         },
                         new Clock()
@@ -315,7 +315,7 @@ namespace UnitTests.Weather
             Models.Climate.SimpleWeather weather = baseSim.Children[0] as Models.Climate.SimpleWeather;
             Clock clock = baseSim.Children[1] as Clock;
 
-            weather.FileName = weatherFilePath2;
+            weather.FullFileName = weatherFilePath2;
             clock.StartDate = DateTime.ParseExact("1990-01-01", "yyyy-MM-dd", CultureInfo.InvariantCulture);
             clock.EndDate = DateTime.ParseExact("1990-01-02", "yyyy-MM-dd", CultureInfo.InvariantCulture);
             baseSim.Prepare();

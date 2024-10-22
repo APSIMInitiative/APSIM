@@ -9,9 +9,8 @@ using Newtonsoft.Json;
 
 namespace Models.Climate
 {
-
     /// <summary>
-    /// Allow random sampling of whole years of weather data from a weather file.
+    /// Generates random sampling for whole years of weather data from a weather file
     /// </summary>
     [Serializable]
     [ViewName("UserInterface.Views.PropertyView")]
@@ -27,51 +26,123 @@ namespace Models.Climate
 
     public class WeatherSampler : Model, IWeather
     {
-        /// <summary>A data table of all weather data.</summary>
-        private DataTable data;
-
-        /// <summary>The current row into the weather data table.</summary>
-        private int currentRowIndex;
-
-        /// <summary>The current index into the Years array.</summary>
-        private int currentYearIndex;
-
-        /// <summary>The first date in the weather file.</summary>
-        private DateTime firstDateInFile;
-
-        /// <summary>The last date in the weather file.</summary>
-        private DateTime lastDateInFile;
-
+        /// <summary>
+        /// A link to the clock model
+        /// </summary>
         [Link]
         private IClock clock = null;
 
+        /// <summary>
+        /// A link to access the simulation level models
+        /// </summary>
         [Link]
         private Simulation simulation = null;
 
-        /// <summary>Type of randomiser enum for drop down.</summary>
+        /// <summary>
+        /// A link to the summary (log file)
+        /// </summary>
+        [Link]
+        private ISummary summary = null;
+
+        /// <summary>
+        /// Event that will be invoked immediately before the daily weather data is updated
+        /// </summary>
+        /// <remarks>
+        /// This provides models and scripts an opportunity to change the weather data before
+        /// other models access them
+        /// </remarks>
+        public event EventHandler PreparingNewWeatherData;
+
+        /// <summary>A data table of all weather data</summary>
+        private DataTable data;
+
+        /// <summary>The current row into the weather data table</summary>
+        private int currentRowIndex;
+
+        /// <summary>The current index into the years array</summary>
+        private int currentYearIndex;
+
+        /// <summary>The first date in the weather file</summary>
+        private DateTime firstDateInFile;
+
+        /// <summary>The last date in the weather file</summary>
+        private DateTime lastDateInFile;
+
+        /// <summary>Options defining year sampling type</summary>
         public enum RandomiserTypeEnum
         {
-            /// <summary>Specify years manually.</summary>
+            /// <summary>Specify years manually</summary>
             SpecificYears,
 
-            /// <summary>Random sampler.</summary>
+            /// <summary>Fully random sampler</summary>
             RandomSample,
 
-            /// <summary>Random choose the first year to draw weather data from.</summary>
+            /// <summary>Random choose the first year to draw weather data from</summary>
             RandomChooseFirstYear
         }
 
+        /// <summary>
+        /// Default value for wind speed (m/s)
+        /// </summary>
+        private const double defaultWind = 3.0;
 
-        /// <summary>The weather file name.</summary>
+        /// <summary>
+        /// Default value for atmospheric CO2 concentration (ppm)
+        /// </summary>
+        private const double defaultCO2 = 350.0;
+
+        /// <summary>
+        /// Default value for solar angle for computing twilight (degrees)
+        /// </summary>
+        private const double defaultTwilight = 6.0;
+
+        /// <summary>
+        /// Maximum value expected for mean long-term temperature amplitude (oC)
+        /// </summary>
+        private const double maximumAMP = 25.0;
+
+        /// <summary>
+        /// Gets or sets the weather file name. Should be relative file path where possible
+        /// </summary>
         [Summary]
         [Description("Weather file to sample from")]
         public string FileName { get; set; }
 
-        /// <summary>Type of year sampling.</summary>
+        /// <summary>
+        /// Gets or sets the full file name (with path)
+        /// </summary>
+        [JsonIgnore]
+        public string FullFileName
+        {
+            get
+            {
+                Simulation simulation = FindAncestor<Simulation>();
+                if (simulation != null && simulation.FileName != null)
+                    return PathUtilities.GetAbsolutePath(FileName, simulation.FileName);
+                else
+                {
+                    Simulations simulations = FindAncestor<Simulations>();
+                    if (simulations != null)
+                        return PathUtilities.GetAbsolutePath(FileName, simulations.FileName);
+                    else
+                        return PathUtilities.GetAbsolutePath(FileName, "");
+                }
+            }
+            set
+            {
+                Simulations simulations = FindAncestor<Simulations>();
+                if (simulations != null)
+                    FileName = PathUtilities.GetRelativePath(value, simulations.FileName);
+                else
+                    FileName = value;
+            }
+        }
+
+        /// <summary>Choice of year sampling type</summary>
         [Description("Type of sampling")]
         public RandomiserTypeEnum TypeOfSampling { get; set; }
 
-        /// <summary>The sample years.</summary>
+        /// <summary>The seed for sampling years</summary>
         [Summary]
         [Description("Seed to pass to random number generator. Leave blank for fully random")]
         [Display(VisibleCallback = "IsRandomEnabled")]
@@ -79,148 +150,177 @@ namespace Models.Climate
 
         /// <summary>The sample years.</summary>
         [Summary]
-        [Description("Years to sample from the weather file.")]
+        [Description("Years from which to sample the weather file")]
         [Display(VisibleCallback = "IsSpecifyYearsEnabled")]
-        public int[] Years { get; set; }
+        public int[] SampleYears { get; set; }
 
-
-        /// <summary>Is random enabled?</summary>
+        /// <summary>Flag whether random sampling is enabled</summary>
         public bool IsRandomEnabled { get { return TypeOfSampling == RandomiserTypeEnum.RandomSample || TypeOfSampling == RandomiserTypeEnum.RandomChooseFirstYear; } }
 
-        /// <summary>Is 'specify years' enabled?</summary>
+        /// <summary>Flag whether 'specify years' is enabled</summary>
         public bool IsSpecifyYearsEnabled { get { return TypeOfSampling == RandomiserTypeEnum.SpecificYears; } }
 
-        /// <summary>The date when years tick over.</summary>
+        /// <summary>The date marking when years tick over</summary>
         [Summary]
-        [Description("The date marking the start of sampling years (d-mmm). Leave blank for 1-Jan")]
+        [Description("Date marking the start of a sampling year (d-mmm). Leave blank for 1-Jan")]
         public string SplitDate { get; set; }
 
+        /// <summary>Gets the start date of the weather file</summary>
+        public DateTime StartDate => clock.StartDate;
 
+        /// <summary>Gets the end date of the weather file</summary>
+        public DateTime EndDate => clock.EndDate;
+
+        /// <summary>Gets or sets the daily minimum air temperature (oC)</summary>
+        [JsonIgnore]
+        [Units("oC")]
+        public double MinT { get; set; }
+
+        /// <summary>Gets or sets the daily maximum air temperature (oC)</summary>
+        [JsonIgnore]
+        [Units("oC")]
+        public double MaxT { get; set; }
+
+        /// <summary>Gets the daily mean air temperature (oC)</summary>
+        [JsonIgnore]
+        [Units("oC")]
+        public double MeanT { get { return (MaxT + MinT) / 2; } }
+
+        /// <summary>Gets or sets the solar radiation (MJ/m2)</summary>
+        [JsonIgnore]
+        [Units("MJ/m2")]
+        public double Radn { get; set; }
+
+        /// <summary>Gets or sets the maximum clear sky radiation (MJ/m2)</summary>
+        [JsonIgnore]
+        [Units("MJ/m2")]
+        public double Qmax { get; set; }
+
+        /// <summary>Gets or sets the day length, period with light (h)</summary>
+        [JsonIgnore]
+        [Units("h")]
+        public double DayLength { get; set; }
+
+        /// <summary>Gets or sets the diffuse radiation fraction (0-1)</summary>
+        [JsonIgnore]
+        [Units("0-1")]
+        public double DiffuseFraction { get; set; }
+
+        /// <summary>Gets or sets the rainfall amount (mm)</summary>
+        [JsonIgnore]
+        [Units("mm")]
+        public double Rain { get; set; }
+
+        /// <summary>Gets or sets the number duration of rainfall within a day (h)</summary>
+        [JsonIgnore]
+        [Units("h")]
+        public double RainfallHours { get; set; }
+
+        /// <summary>Gets or sets the class A pan evaporation (mm)</summary>
+        [JsonIgnore]
+        [Units("mm")]
+        public double PanEvap { get; set; }
+
+        /// <summary>Gets or sets the air vapour pressure (hPa)</summary>
+        [JsonIgnore]
+        [Units("hPa")]
+        public double VP { get; set; }
+
+        /// <summary>Gets or sets the daily mean vapour pressure deficit (hPa)</summary>
+        [JsonIgnore]
+        [Units("hPa")]
+        public double VPD { get; set; }
+
+        /// <summary>Gets or sets the average wind speed (m/s)</summary>
+        [JsonIgnore]
+        [Units("m/s")]
+        public double Wind { get; set; }
+
+        /// <summary>Gets or sets the CO2 level in the atmosphere (ppm)</summary>
+        [JsonIgnore]
+        [Units("ppm")]
+        public double CO2 { get; set; }
+
+        /// <summary>Gets or sets the mean atmospheric air pressure</summary>
+        [JsonIgnore]
+        [Units("hPa")]
+        public double AirPressure { get; set; }
+
+        /// <summary>Gets or sets the latitude (decimal degrees)</summary>
+        [JsonIgnore]
+        [Units("degrees")]
+        public double Latitude { get; set; }
+
+        /// <summary>Gets or sets the longitude (decimal degrees)</summary>
+        [JsonIgnore]
+        [Units("degrees")]
+        public double Longitude { get; set; }
+
+        /// <summary>Gets the long-term average air temperature (oC)</summary>
+        [JsonIgnore]
+        [Units("oC")]
+        public double Tav { get; set; }
+
+        /// <summary>Gets the long-term average temperature amplitude (oC)</summary>
+        [JsonIgnore]
+        [Units("oC")]
+        public double Amp { get; set; }
+
+        /// <summary>Gets the day for the winter solstice (day)</summary>
+        [JsonIgnore]
+        [Units("day")]
+        public int WinterSolsticeDOY
+        {
+            get
+            {
+                if (Latitude <= 0)
+                {
+                    if (DateTime.IsLeapYear(clock.Today.Year))
+                        return 173;
+                    else
+                        return 172;
+                }
+                else
+                {
+                    if (DateTime.IsLeapYear(clock.Today.Year))
+                        return 356;
+                    else
+                        return 355;
+                }
+            }
+        }
+
+        /// <summary>Gets or sets the number of days since the winter solstice</summary>
+        [JsonIgnore]
+        [Units("d")]
+        public int DaysSinceWinterSolstice { get; set; }
 
         /// <summary>Met Data from yesterday</summary>
         [JsonIgnore]
         public DailyMetDataFromFile YesterdaysMetData { get; set; }
 
-        /// <summary>Met Data from yesterday</summary>
+        /// <summary>Met Data for tomorrow</summary>
         [JsonIgnore]
         public DailyMetDataFromFile TomorrowsMetData { get; set; }
 
-        /// <summary>The start date of the weather file.</summary>
-        public DateTime StartDate => clock.StartDate;
-
-        /// <summary>The end date of the weather file.</summary>
-        public DateTime EndDate => clock.EndDate;
-
-        /// <summary>The maximum temperature (oc).</summary>
-        [Units("°C")]
-        [JsonIgnore]
-        public double MaxT { get; set; }
-
-        /// <summary>Gets or sets the minimum temperature (oc).</summary>
-        [Units("°C")]
-        [JsonIgnore]
-        public double MinT { get; set; }
-
-        /// <summary>Mean temperature. </summary>
-        [Units("°C")]
-        [JsonIgnore]
-        public double MeanT { get { return (MaxT + MinT) / 2; } }
-
-        /// <summary>Daily mean VPD.</summary>
-        [Units("hPa")]
-        [JsonIgnore]
-        public double VPD { get; set; }
-
-        /// <summary>Daily Pan evaporation.</summary>
-        [Units("mm")]
-        [JsonIgnore]
-        public double PanEvap { get; set; }
-
-        /// <summary>Rainfall (mm).</summary>
-        [Units("mm")]
-        [JsonIgnore]
-        public double Rain { get; set; }
-
-        /// <summary>Solar radiation (MJ/m2/day).</summary>
-        [Units("MJ/m^2/d")]
-        [JsonIgnore]
-        public double Radn { get; set; }
-
-        /// <summary>Vapor pressure.</summary>
-        [Units("hPa")]
-        [JsonIgnore]
-        public double VP { get; set; }
-
-        /// <summary>Wind.</summary>
-        [JsonIgnore]
-        public double Wind { get; set; }
-
-        /// <summary>CO2 level. If not specified in the weather file the default is 350.</summary>
-        [Units("ppm")]
-        [JsonIgnore]
-        public double CO2 { get; set; }
-
-        /// <summary>Atmospheric air pressure. If not specified in the weather file the default is 1010 hPa.</summary>
-        [Units("hPa")]
-        [JsonIgnore]
-        public double AirPressure { get; set; }
-
-        /// <summary>Diffuse radiation fraction. If not specified in the weather file the default is 1.</summary>
-        [Units("0-1")]
-        [JsonIgnore]
-        public double DiffuseFraction { get; set; }
-
-        /// <summary>Latitude.</summary>
-        [JsonIgnore]
-        public double Latitude { get; set; }
-
-        /// <summary>Gets the longitude</summary>
-        [JsonIgnore]
-        public double Longitude { get; set; }
-
-        /// <summary>Average temperature.</summary>
-        [Units("°C")]
-        [JsonIgnore]
-        public double Tav { get; set; }
-
-        /// <summary>Temperature amplitude.</summary>
-        [Units("°C")]
-        [JsonIgnore]
-        public double Amp { get; set; }
-
         /// <summary>
-        /// This event will be invoked immediately before models get their weather data.
-        /// models and scripts an opportunity to change the weather data before other models
-        /// reads it.
+        /// Check values in weather and return a collection of warnings
         /// </summary>
-        public event EventHandler PreparingNewWeatherData;
-
-        /// <summary>Duration of the day in hours.</summary>
-        /// <param name="Twilight">The twilight angle.</param>
-        public double CalculateDayLength(double Twilight)
+        public IEnumerable<string> Validate()
         {
-            return MathUtilities.DayLength(clock.Today.DayOfYear, Twilight, this.Latitude);
+            if (Amp > maximumAMP)
+            {
+                yield return $"The value of Weather.AMP ({Amp}) is > {maximumAMP} oC. Please check the value.";
+            }
         }
 
-        /// <summary> calculate the time of sun rise</summary>
-        /// <returns>Sun rise time</returns>
-        public double CalculateSunRise()
-        {
-            return 12 - CalculateDayLength(-6) / 2;
-        }
-
-        /// <summary> calculate the time of sun set</summary>
-        /// <returns>Sun set time</returns>
-        public double CalculateSunSet()
-        {
-            return 12 + CalculateDayLength(-6) / 2;
-        }
-
-        /// <summary>Called at the beginning of a simulation.</summary>
+        /// <summary>Overrides the base class method to allow for initialization of this model </summary>
+        /// <param name="sender">The sender of the event</param>
+        /// <param name="e">The arguments of the event</param>
         [EventSubscribe("Commencing")]
-        private void OnStartOfSimulation(object sender, EventArgs e)
+        private void OnSimulationCommencing(object sender, EventArgs e)
         {
-            // Open the weather file and read its contents.
+            // open the weather file and read its contents.
             var file = new ApsimTextFile();
             try
             {
@@ -238,24 +338,24 @@ namespace Models.Climate
                 if (file.Constant("CO2") != null)
                     CO2 = Convert.ToDouble(file.Constant("CO2").Value);
                 else
-                    CO2 = 350;
+                    CO2 = defaultCO2;
             }
             finally
             {
                 file.Close();
             }
 
-            // Make sure some data was read.
+            // check that some data was read
             if (data.Rows.Count == 0)
                 throw new Exception($"No weather data found in file {FileName}");
 
-            // If sampling method is random then create an array of random years.
+            // if sampling method is random then create an array of random years
             if (IsRandomEnabled)
             {
-                // Determine the number of years to extract out of the weather file.
+                // number of years to extract out of the weather file
                 int numYears = clock.EndDate.Year - clock.StartDate.Year + 1;
 
-                // Determine the year range to sample from. Only sample from years that have a full record i.e. 1-jan to 31-dec
+                // year range to sample from. Only sample from years that have a full annual record
                 var firstYearToSampleFrom = firstDateInFile.Year;
                 var lastYearToSampleFrom = lastDateInFile.Year;
                 if (firstDateInFile.DayOfYear > 1)
@@ -271,38 +371,40 @@ namespace Models.Climate
 
                 if (TypeOfSampling == RandomiserTypeEnum.RandomSample)
                 {
-                    // Randomly sample from the weather record for the required number of years.
-                    Years = new int[numYears];
+                    // randomly sample from the weather record for the required number of years
+                    SampleYears = new int[numYears];
 
                     for (int i = 0; i < numYears; i++)
-                        Years[i] = random.Next(firstYearToSampleFrom, lastYearToSampleFrom);
+                        SampleYears[i] = random.Next(firstYearToSampleFrom, lastYearToSampleFrom);
                 }
                 else if (TypeOfSampling == RandomiserTypeEnum.RandomChooseFirstYear)
                 {
-                    // Randomly choose a year to draw weather data from.
-                    // The year chosen can't be at the end of the weather record because there needs to be sufficient years of 
-                    // consecutive weather data after the chosen year for the length of simulation. Limit the random number generator to 
-                    // allow for this.
+                    // randomly choose a year from which to start drawing weather data
+                    // The year chosen can't be to close to end of the weather record. As this is the year
+                    // to start the sampling, there needs to at least as many year after this as the length
+                    // of the simulation. Here the random number generator is limited to account for this
                     var lastYearForRandomNumberGenerator = lastYearToSampleFrom - numYears + 1;
                     if (lastYearForRandomNumberGenerator < firstYearToSampleFrom)
                         throw new Exception("There is insufficient weather data for the length of simulation (clock enddate-startdate). Cannot randomly sample the start date.");
                     firstYearToSampleFrom = random.Next(firstYearToSampleFrom, lastYearForRandomNumberGenerator);
-                    Years = Enumerable.Range(firstYearToSampleFrom, numYears).ToArray();
+                    SampleYears = Enumerable.Range(firstYearToSampleFrom, numYears).ToArray();
                 }
             }            
 
-            if (Years == null || Years.Length == 0)
+            if (SampleYears == null || SampleYears.Length == 0)
                 throw new Exception("No years specified in WeatherRandomiser");
 
-            if (string.IsNullOrEmpty(SplitDate)) {
-                SplitDate = "1-jan";
-            }
+            if (string.IsNullOrEmpty(SplitDate))
+                SplitDate = "1-Jan";
+
+            foreach (var message in Validate())
+                summary.WriteMessage(this, message, MessageType.Warning);
 
             currentYearIndex = 0;
-            currentRowIndex = FindRowForDate(new DateTime(Years[currentYearIndex], clock.StartDate.Month, clock.StartDate.Day));
+            currentRowIndex = FindRowForDate(new DateTime(SampleYears[currentYearIndex], clock.StartDate.Month, clock.StartDate.Day));
         }
 
-        /// <summary>An event handler for the daily DoWeather event.</summary>
+        /// <summary>Performs the tasks to update the weather data</summary>
         /// <param name="sender">The sender of the event</param>
         /// <param name="e">The arguments of the event</param>
         [EventSubscribe("DoWeather")]
@@ -310,32 +412,33 @@ namespace Models.Climate
         {
             if (clock.Today == DateUtilities.GetDate(SplitDate, clock.Today.Year))
             {
-                // Need to change years to next one in sequence.
+                // need to change years to next one in sequence
                 currentYearIndex++;
-                if (currentYearIndex == Years.Length)
+                if (currentYearIndex == SampleYears.Length)
                     currentYearIndex = 0;
                 
-                var dateToFind = DateUtilities.GetDate(SplitDate, Years[currentYearIndex]);
+                var dateToFind = DateUtilities.GetDate(SplitDate, SampleYears[currentYearIndex]);
                 currentRowIndex = FindRowForDate(dateToFind);
             }
 
             var dateInFile = DataTableUtilities.GetDateFromRow(data.Rows[currentRowIndex]);
             if (dateInFile.Day == 29 && dateInFile.Month == 2 && clock.Today.Day == 1 && clock.Today.Month == 3)
             {
-                // Leap day in weather data but not clock - skip the leap day.
+                // leap day in weather data but not clock - skip the leap day
                 currentRowIndex++;
             }
             else if (dateInFile.Day == 1 && dateInFile.Month == 3 && clock.Today.Day == 29 && clock.Today.Month == 2)
             {
-                // Leap day in clock but not weather data.
+                // leap day in clock but not weather data - repeat last day
                 currentRowIndex--;
             }
             else
             {
-                // Make sure date in file matches the clock.
+                // Make sure date in file matches the clock
                 if (clock.Today.Day != dateInFile.Day || clock.Today.Month != dateInFile.Month)
                     throw new Exception($"Non contiguous weather data found at date {dateInFile}");
             }
+
             MaxT = Convert.ToDouble(data.Rows[currentRowIndex]["MaxT"]);
             MinT = Convert.ToDouble(data.Rows[currentRowIndex]["MinT"]);
             Radn = Convert.ToDouble(data.Rows[currentRowIndex]["Radn"]);
@@ -345,29 +448,57 @@ namespace Models.Climate
             if (data.Columns.Contains("Wind"))
                 Wind = Convert.ToDouble(data.Rows[currentRowIndex]["Wind"]);
             if (AirPressure == 0)
-                this.AirPressure = 1010;
+                AirPressure = 1010;
 
             currentRowIndex++;
 
             PreparingNewWeatherData?.Invoke(this, new EventArgs());
         }
 
-        /// <summary>
-        /// Find a row in the data table that matches a date. Will throw if not found.
-        /// </summary>
-        /// <param name="dateToFind">The date to find.</param>
-        /// <returns>The index of the found row.</returns>
-        private int FindRowForDate(DateTime dateToFind)
+        /// <summary>Finds a row in the data table that matches a given date</summary>
+        /// <remarks>Will throw an exception if date not found</remarks>
+        /// <param name="date">The date to find</param>
+        /// <returns>The index of the row found</returns>
+        private int FindRowForDate(DateTime date)
         {
             var firstDateInFile = DataTableUtilities.GetDateFromRow(data.Rows[0]);
-            var rowIndex = (dateToFind - firstDateInFile).Days;
+            var rowIndex = (date - firstDateInFile).Days;
 
-            // check to make sure dates are ok.
+            // check to make sure dates are ok
             if (rowIndex < 0)
-                throw new Exception($"Cannot find year in weather file. Year = {Years[currentYearIndex]}");
-            if (DataTableUtilities.GetDateFromRow(data.Rows[rowIndex]) != dateToFind)
+                throw new Exception($"Cannot find year in weather file. Year = {SampleYears[currentYearIndex]}");
+            if (DataTableUtilities.GetDateFromRow(data.Rows[rowIndex]) != date)
                 throw new Exception($"Non consecutive dates found in file {FileName}");
             return rowIndex;
+        }
+
+        /// <summary>Computes the duration of the day, with light (hours)</summary>
+        /// <param name="Twilight">The angle to measure time for twilight (degrees)</param>
+        /// <returns>The number of hours of daylight</returns>
+        public double CalculateDayLength(double Twilight)
+        {
+            if (DayLength <= -1)
+            { // day length was not given as column or set as a constant
+                return MathUtilities.DayLength(clock.Today.DayOfYear, Twilight, Latitude);
+            }
+            else
+            {
+                return DayLength;
+            }
+        }
+
+        /// <summary>Computes the time of sun rise (h)</summary>
+        /// <returns>Sun rise time</returns>
+        public double CalculateSunRise()
+        {
+            return 12 - CalculateDayLength(-6) / 2;
+        }
+
+        /// <summary>Computes the time of sun set (h)</summary>
+        /// <returns>Sun set time</returns>
+        public double CalculateSunSet()
+        {
+            return 12 + CalculateDayLength(-6) / 2;
         }
     }
 }

@@ -25,14 +25,14 @@
             {
                 Children = new List<IModel>()
                 {
-                    new Clock() 
+                    new Clock()
                     {
                         StartDate = new DateTime(3000, 6, 1)
                     },
                     new WeatherSampler()
                     {
                         FileName = weatherFilePath,
-                        Years = new int[] { 1995, 1952, 1993 }
+                        SampleYears = new int[] { 1995, 1952, 1993 }
                     },
                     new MockSummary()
                 }
@@ -45,11 +45,11 @@
             Utilities.InjectLink(weatherSampler, "clock", clock);
 
             var weather = baseSim.Children[1] as WeatherSampler;
-            Utilities.CallEvent(weather, "StartOfSimulation");
+            Utilities.CallEvent(weather, "SimulationCommencing");
 
             // ################## YEAR 1 - year before a leap year
             // 1st Jun 1995 in weather file
-            // year day  radn  maxt   mint  rain  pan    vp    
+            // year day  radn  maxt   mint  rain  pan    vp
             // 1995 152   14.0  22.5  10.0   4.3   2.2  15.0
             Utilities.CallEvent(weather, "DoWeather");
             Assert.That(weather.Radn, Is.EqualTo(14).Within(delta));
@@ -63,7 +63,7 @@
                 AdvanceOneDay(weather, clock);
 
             // 31st May 1952 in weather file
-            // year day  radn  maxt   mint  rain  pan    vp    
+            // year day  radn  maxt   mint  rain  pan    vp
             // 1952 152   16.0  21.7   6.1   0.0   2.8   9.4
             Assert.That(weather.Radn, Is.EqualTo(16).Within(delta));
             Assert.That(weather.MaxT, Is.EqualTo(21.7).Within(delta));
@@ -73,7 +73,7 @@
 
             // ################## YEAR 2 - leap year
             // 1st June 1952 in weather file
-            // year day  radn  maxt   mint  rain  pan    vp    
+            // year day  radn  maxt   mint  rain  pan    vp
             // 1952 153   16.0  20.6   6.1   0.0   2.8   9.7
             AdvanceOneDay(weather, clock);
             Assert.That(weather.Radn, Is.EqualTo(16).Within(delta));
@@ -87,7 +87,7 @@
                 AdvanceOneDay(weather, clock);
 
             // 31st May 1993 in weather file
-            // year day  radn  maxt   mint  rain  pan    vp    
+            // year day  radn  maxt   mint  rain  pan    vp
             // 1993 151   14.0  24.5   9.5   0.0   2.6  15.0
             Assert.That(weather.Radn, Is.EqualTo(14).Within(delta));
             Assert.That(weather.MaxT, Is.EqualTo(24.5).Within(delta));
@@ -97,7 +97,7 @@
 
             // ################## YEAR 3 - year after leap year
             // 1st June 1993 in weather file
-            // year day   radn  maxt   mint  rain  pan    vp    
+            // year day   radn  maxt   mint  rain  pan    vp
             // 1993 152    9.0  24.0  14.0   0.0   2.6  16.0
             AdvanceOneDay(weather, clock);
             Assert.That(weather.Radn, Is.EqualTo(9).Within(delta));
@@ -112,7 +112,7 @@
 
             // ***** BACK TO FIRST YEAR (1995)
             // 1st Jun 1995 in weather file
-            // year day  radn  maxt   mint  rain  pan    vp    
+            // year day  radn  maxt   mint  rain  pan    vp
             // 1995 152   14.0  22.5  10.0   4.3   2.2  15.0
             Assert.That(weather.Radn, Is.EqualTo(14).Within(delta));
             Assert.That(weather.MaxT, Is.EqualTo(22.5).Within(delta));
@@ -132,14 +132,14 @@
             {
                 Children = new List<IModel>()
                 {
-                    new Clock() 
+                    new Clock()
                     {
                         StartDate = new DateTime(3000, 6, 1)
                     },
                     new WeatherSampler()
                     {
                         FileName = weatherFilePath,
-                        Years = new int[] { 1995, 1952, 1993 },
+                        SampleYears = new int[] { 1995, 1952, 1993 },
                         SplitDate = "2-jun"
                     },
                     new MockSummary()
@@ -153,11 +153,11 @@
             Utilities.InjectLink(weatherSampler, "clock", clock);
 
             var weather = baseSim.Children[1] as WeatherSampler;
-            Utilities.CallEvent(weather, "StartOfSimulation");
+            Utilities.CallEvent(weather, "SimulationCommencing");
 
-            // ################## YEAR 1 
+            // ################## YEAR 1
             // 1st Jun 1995 in weather file
-            // year day  radn  maxt   mint  rain  pan    vp    
+            // year day  radn  maxt   mint  rain  pan    vp
             // 1995 152   14.0  22.5  10.0   4.3   2.2  15.0
             Utilities.CallEvent(weather, "DoWeather");
             Assert.That(weather.Radn, Is.EqualTo(14).Within(delta));
