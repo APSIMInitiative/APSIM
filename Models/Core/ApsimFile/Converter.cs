@@ -24,7 +24,7 @@ namespace Models.Core.ApsimFile
     public class Converter
     {
         /// <summary>Gets the latest .apsimx file format version.</summary>
-        public static int LatestVersion { get { return 183; } }
+        public static int LatestVersion { get { return 184; } }
 
         /// <summary>Converts a .apsimx string to the latest version.</summary>
         /// <param name="st">XML or JSON string to convert.</param>
@@ -5746,7 +5746,7 @@ namespace Models.Core.ApsimFile
                 ["THCutOff6"] = values[9],
             });
         }
-        
+
         /// <summary>
         /// Renames the Operation property of Operations to OperationsList to avoid name conficts with the Operation class
         /// </summary>
@@ -5802,7 +5802,7 @@ namespace Models.Core.ApsimFile
                 }
             }
         }
-        
+
         /// <summary>
         /// Reparents graphs incorrectly placed under a Simulation under an Experiment
         /// </summary>
@@ -5826,7 +5826,7 @@ namespace Models.Core.ApsimFile
                         foreach(IModel child in experiment.Children)
                         {
                             // TODO: Needs to not add a graph to an experiment if another object
-                            // has the same name. Slurp has an existing irrigation graph (that doesn't work) 
+                            // has the same name. Slurp has an existing irrigation graph (that doesn't work)
                             // that causes issues.
                             if (child.Name.Equals(graph["Name"].ToString()))
                                 duplicateGraphExists = true;
@@ -5838,7 +5838,47 @@ namespace Models.Core.ApsimFile
                 }
             }
         }
+
+        /// <summary>
+        /// Replace old CERES soil temperature model with new one.
+        /// </summary>
+        /// <param name="root"></param>
+        /// <param name="fileName"></param>
+        private static void UpgradeToVersion184(JObject root, string fileName)
+        {
+            foreach (JObject soil in JsonUtilities.ChildrenRecursively(root, "Soil"))
+            {
+                // Remove all ceres soil temperature models.
+                string name = null;
+                var soilChildren = soil["Children"] as JArray;
+                foreach (var ceresChild in JsonUtilities.ChildrenOfType(soil, "CERESSoilTemperature"))
+                {
+                    if (name == null)
+                        name = ceresChild["Name"].ToString();
+                    soilChildren.Remove(ceresChild);
+                }
+
+                // Add new soil temperature model if necessary
+                if (JsonUtilities.ChildrenOfType(soil, "SoilTemperature").Count == 0)
+                {
+                    // Need to make sure NutrientPatchManger is last child.
+                    // Try and get index of NutrientPatchManger
+                    int i;
+                    for (i = 0; i < soilChildren.Count; i++)
+                    {
+                        if (soilChildren[i]["$type"].ToString().Contains(".NutrientPatchManager"))
+                            break;
+                    }
+
+                    soilChildren.Insert(i, new JObject()
+                    {
+                        ["$type"] = "Models.Soils.SoilTemp.SoilTemperature, Models",
+                        ["Name"] = name ?? "Temperature"
+                    });
+                }
+            }
+        }
     }
-    
+
 }
 

@@ -86,16 +86,13 @@ namespace Models
 
         /// <summary>Height of the tallest canopy.</summary>
         [Units("mm")]
-        public double CanopyHeight
-        {
-            get
-            {
-                if (microClimatesZones.Sum(n => n.Canopies.Count) == 0)
-                    return 0;
-                else
-                    return microClimatesZones.Max(m => m.Canopies.Max(c => c.Canopy.Height));
-            }
-        }
+        public double CanopyHeight => microClimatesZones.Max(m => 
+                                      {
+                                          if (m.Canopies.Count == 0 )
+                                              return 0;
+                                          else
+                                              return m.Canopies.Max(c => c.Canopy.Height);
+                                      });
 
         /// <summary>The fraction of intercepted rainfall that evaporates at night</summary>
         [Description("The fraction of intercepted rainfall that evaporates at night")]

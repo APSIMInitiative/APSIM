@@ -11,6 +11,7 @@
     using Models.PMF;
     using Models.Soils;
     using Models.Soils.Nutrients;
+    using Models.Soils.SoilTemp;
     using Models.Storage;
     using Models.Surface;
     using NUnit.Framework;
@@ -136,17 +137,17 @@
             ISoilWater sw = s.Children[2] as ISoilWater;
             Assert.That(sw.Thickness, Is.EqualTo(new double[] { 150, 150, 300, 300 }));
 
-            Assert.That(s.Children[9] is Nutrient, Is.True);
-            Assert.That(s.Children[3] is CERESSoilTemperature, Is.True);
+            Assert.That(s.Children[8] is Nutrient, Is.True);
+            Assert.That(s.Children[9] is SoilTemperature, Is.True);
+            Assert.That(s.Children[3] is Solute, Is.True);
             Assert.That(s.Children[4] is Solute, Is.True);
             Assert.That(s.Children[5] is Solute, Is.True);
-            Assert.That(s.Children[6] is Solute, Is.True);
-            Organic som = s.Children[7] as Organic;
+            Organic som = s.Children[6] as Organic;
             Assert.That(som.Thickness, Is.EqualTo(new double[] { 150, 150, 300, 300 }));
             Assert.That(som.Carbon, Is.EqualTo(new double[] { 1.04, 0.89, 0.89, 0.89 }));
             Assert.That(som.FBiom, Is.EqualTo(new double[] { 0.025, 0.02, 0.015, 0.01 }));
 
-            Chemical a = s.Children[8] as Chemical;
+            Chemical a = s.Children[7] as Chemical;
             Assert.That(a.Thickness, Is.EqualTo(new double[] { 150, 150, 300, 300 }));
             Assert.That(a.EC, Is.EqualTo(new double[] { 0.2, 0.25, 0.31, 0.40 }));
             Assert.That(a.PH, Is.EqualTo(new double[] { 8.4, 8.8, 9.0, 9.2 }));
@@ -173,7 +174,7 @@
 
             var f = sims.Children[0].Children[0] as Plant;
             Assert.That(f, Is.Not.Null);
-        }   
+        }
 
         /// <summary>Ensure MANAGER imports OK</summary>
         [Test]

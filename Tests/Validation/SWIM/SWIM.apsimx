@@ -1,6 +1,6 @@
 {
   "$type": "Models.Core.Simulations, Models",
-  "Version": 180,
+  "Version": 184,
   "Name": "Simulations",
   "ResourceName": null,
   "Children": [
@@ -16,6 +16,7 @@
     {
       "$type": "Models.Core.Folder, Models",
       "ShowInDocs": false,
+      "GraphsPerPage": 6,
       "Name": "Replacements",
       "ResourceName": null,
       "Children": [
@@ -313,6 +314,7 @@
     {
       "$type": "Models.Core.Folder, Models",
       "ShowInDocs": true,
+      "GraphsPerPage": 6,
       "Name": "Statistical Validation Results",
       "ResourceName": null,
       "Children": [
@@ -963,12 +965,14 @@
     {
       "$type": "Models.Core.Folder, Models",
       "ShowInDocs": false,
+      "GraphsPerPage": 6,
       "Name": "Validation",
       "ResourceName": null,
       "Children": [
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": false,
+          "GraphsPerPage": 6,
           "Name": "Hudson",
           "ResourceName": null,
           "Children": [
@@ -1011,6 +1015,9 @@
                   "ConstantsFile": null,
                   "FileName": "Hudson.met",
                   "ExcelWorkSheetName": null,
+                  "Latitude": -31.52,
+                  "Tav": 15.0,
+                  "Amp": 15.0,
                   "Name": "Weather",
                   "ResourceName": null,
                   "Children": [],
@@ -1658,14 +1665,6 @@
                           "ReadOnly": false
                         },
                         {
-                          "$type": "Models.Soils.CERESSoilTemperature, Models",
-                          "Name": "Temperature",
-                          "ResourceName": null,
-                          "Children": [],
-                          "Enabled": true,
-                          "ReadOnly": false
-                        },
-                        {
                           "$type": "Models.Soils.Swim3, Models",
                           "Salb": 0.13,
                           "CN2Bare": 75.0,
@@ -2077,6 +2076,16 @@
                           "Children": [],
                           "Enabled": true,
                           "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilTemp.SoilTemperature, Models",
+                          "Thickness": null,
+                          "InitialValues": null,
+                          "Name": "Temperature",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
                         }
                       ],
                       "Enabled": true,
@@ -2293,6 +2302,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Crop",
                   "ResourceName": null,
                   "Children": [
@@ -2681,6 +2691,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "SoilWater",
                   "ResourceName": null,
                   "Children": [
@@ -2982,6 +2993,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Chloride",
                   "ResourceName": null,
                   "Children": [
@@ -3291,6 +3303,7 @@
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": false,
+          "GraphsPerPage": 6,
           "Name": "SeepageLysimeter",
           "ResourceName": null,
           "Children": [
@@ -3356,6 +3369,9 @@
                       "ConstantsFile": null,
                       "FileName": "Lysimeter Exp.met",
                       "ExcelWorkSheetName": null,
+                      "Latitude": -37.775,
+                      "Tav": 13.9,
+                      "Amp": 9.9,
                       "Name": "Weather",
                       "ResourceName": null,
                       "Children": [],
@@ -5452,14 +5468,6 @@
                               "ReadOnly": false
                             },
                             {
-                              "$type": "Models.Soils.CERESSoilTemperature, Models",
-                              "Name": "Temperature",
-                              "ResourceName": null,
-                              "Children": [],
-                              "Enabled": false,
-                              "ReadOnly": false
-                            },
-                            {
                               "$type": "Models.Soils.LayerStructure, Models",
                               "Thickness": [
                                 10.0,
@@ -5722,6 +5730,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Graphs",
                   "ResourceName": null,
                   "Children": [
@@ -6031,6 +6040,7 @@
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": false,
+          "GraphsPerPage": 6,
           "Name": "TileDrainageSpacing",
           "ResourceName": null,
           "Children": [
@@ -6088,6 +6098,9 @@
                       "ConstantsFile": null,
                       "FileName": "00_SEPAC_1968_2000.met",
                       "ExcelWorkSheetName": null,
+                      "Latitude": 39.02583,
+                      "Tav": 11.58137,
+                      "Amp": 24.35005,
                       "Name": "Weather",
                       "ResourceName": null,
                       "Children": [],
@@ -6762,14 +6775,6 @@
                               "ReadOnly": false
                             },
                             {
-                              "$type": "Models.Soils.CERESSoilTemperature, Models",
-                              "Name": "Temperature",
-                              "ResourceName": null,
-                              "Children": [],
-                              "Enabled": true,
-                              "ReadOnly": false
-                            },
-                            {
                               "$type": "Models.Soils.Organic, Models",
                               "FOMCNRatio": 45.0,
                               "Thickness": [
@@ -7304,6 +7309,16 @@
                               "Children": [],
                               "Enabled": true,
                               "ReadOnly": false
+                            },
+                            {
+                              "$type": "Models.Soils.SoilTemp.SoilTemperature, Models",
+                              "Thickness": null,
+                              "InitialValues": null,
+                              "Name": "Temperature",
+                              "ResourceName": null,
+                              "Children": [],
+                              "Enabled": true,
+                              "ReadOnly": false
                             }
                           ],
                           "Enabled": true,
@@ -7617,6 +7632,7 @@
             {
               "$type": "Models.Core.Folder, Models",
               "ShowInDocs": true,
+              "GraphsPerPage": 6,
               "Name": "Graphs",
               "ResourceName": null,
               "Children": [
@@ -7724,6 +7740,7 @@
             {
               "$type": "Models.Core.Folder, Models",
               "ShowInDocs": false,
+              "GraphsPerPage": 6,
               "Name": "AllGraphs",
               "ResourceName": null,
               "Children": [
@@ -8000,6 +8017,7 @@
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": false,
+          "GraphsPerPage": 6,
           "Name": "WaterTableLongTerm",
           "ResourceName": null,
           "Children": [
@@ -8023,6 +8041,9 @@
                   "ConstantsFile": null,
                   "FileName": "IA_Kanawaha.July5.2020.met",
                   "ExcelWorkSheetName": null,
+                  "Latitude": 42.915,
+                  "Tav": 7.99652,
+                  "Amp": 30.92653,
                   "Name": "Weather",
                   "ResourceName": null,
                   "Children": [],
@@ -8821,14 +8842,6 @@
                           "ReadOnly": false
                         },
                         {
-                          "$type": "Models.Soils.CERESSoilTemperature, Models",
-                          "Name": "Temperature",
-                          "ResourceName": null,
-                          "Children": [],
-                          "Enabled": true,
-                          "ReadOnly": false
-                        },
-                        {
                           "$type": "Models.Soils.Organic, Models",
                           "FOMCNRatio": 45.0,
                           "Thickness": [
@@ -9387,6 +9400,16 @@
                           "Children": [],
                           "Enabled": true,
                           "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilTemp.SoilTemperature, Models",
+                          "Thickness": null,
+                          "InitialValues": null,
+                          "Name": "Temperature",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
                         }
                       ],
                       "Enabled": true,
@@ -9436,6 +9459,7 @@
             {
               "$type": "Models.Core.Folder, Models",
               "ShowInDocs": true,
+              "GraphsPerPage": 6,
               "Name": "Graphs",
               "ResourceName": null,
               "Children": [
@@ -9543,6 +9567,7 @@
             {
               "$type": "Models.Core.Folder, Models",
               "ShowInDocs": false,
+              "GraphsPerPage": 6,
               "Name": "AllGraphs",
               "ResourceName": null,
               "Children": [
@@ -9809,6 +9834,7 @@
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": false,
+          "GraphsPerPage": 6,
           "Name": "WaterTableMoistureInSeason",
           "ResourceName": null,
           "Children": [
@@ -9842,6 +9868,9 @@
                   "ConstantsFile": null,
                   "FileName": "KelleyNov2021.met",
                   "ExcelWorkSheetName": "",
+                  "Latitude": 42.01,
+                  "Tav": 9.349359,
+                  "Amp": 29.69254,
                   "Name": "Weather",
                   "ResourceName": null,
                   "Children": [],
@@ -10274,7 +10303,26 @@
                             27.0,
                             27.0
                           ],
-                          "Rocks": null,
+                          "Rocks": [
+                            0.11463133640553003,
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.1232423490488006,
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.0,
+                            0.10526881720430115,
+                            0.11666666666666681,
+                            0.125215053763441,
+                            0.13661290322580655,
+                            0.14231182795698938
+                          ],
                           "Texture": null,
                           "BD": [
                             1.25,
@@ -10402,11 +10450,87 @@
                           "DULMetadata": null,
                           "SATMetadata": null,
                           "KSMetadata": null,
-                          "RocksMetadata": null,
+                          "RocksMetadata": [
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated",
+                            "Calculated"
+                          ],
                           "TextureMetadata": null,
-                          "ParticleSizeSandMetadata": null,
-                          "ParticleSizeSiltMetadata": null,
-                          "ParticleSizeClayMetadata": null,
+                          "ParticleSizeSandMetadata": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                          ],
+                          "ParticleSizeSiltMetadata": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                          ],
+                          "ParticleSizeClayMetadata": [
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                          ],
                           "Name": "Physical",
                           "ResourceName": null,
                           "Children": [
@@ -10472,9 +10596,66 @@
                                 0.0,
                                 0.0
                               ],
-                              "LLMetadata": null,
-                              "KLMetadata": null,
-                              "XFMetadata": null,
+                              "LLMetadata": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
+                              "KLMetadata": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
+                              "XFMetadata": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
                               "Name": "MaizeSoil",
                               "ResourceName": null,
                               "Children": [],
@@ -10543,9 +10724,66 @@
                                 0.0,
                                 0.0
                               ],
-                              "LLMetadata": null,
-                              "KLMetadata": null,
-                              "XFMetadata": null,
+                              "LLMetadata": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
+                              "KLMetadata": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
+                              "XFMetadata": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
                               "Name": "SoybeanSoil",
                               "ResourceName": null,
                               "Children": [],
@@ -10634,8 +10872,46 @@
                                 "",
                                 ""
                               ],
-                              "KLMetadata": null,
-                              "XFMetadata": null,
+                              "KLMetadata": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
+                              "XFMetadata": [
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null,
+                                null
+                              ],
                               "Name": "WheatSoil",
                               "ResourceName": null,
                               "Children": [],
@@ -10914,8 +11190,8 @@
                           "PSIDul": -300.0,
                           "VC": true,
                           "DTMin": 0.0,
-                          "DTMax": 60.0,
-                          "MaxWaterIncrement": 2.0,
+                          "DTMax": 1440.0,
+                          "MaxWaterIncrement": 10.0,
                           "SpaceWeightingFactor": 0.0,
                           "SoluteSpaceWeightingFactor": 0.0,
                           "Dis": 0.0,
@@ -10943,14 +11219,6 @@
                               "ReadOnly": false
                             }
                           ],
-                          "Enabled": true,
-                          "ReadOnly": false
-                        },
-                        {
-                          "$type": "Models.Soils.CERESSoilTemperature, Models",
-                          "Name": "Temperature",
-                          "ResourceName": null,
-                          "Children": [],
                           "Enabled": true,
                           "ReadOnly": false
                         },
@@ -11234,6 +11502,16 @@
                           "Children": [],
                           "Enabled": true,
                           "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilTemp.SoilTemperature, Models",
+                          "Thickness": null,
+                          "InitialValues": null,
+                          "Name": "Temperature",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
                         }
                       ],
                       "Enabled": true,
@@ -11290,6 +11568,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Graphs",
                   "ResourceName": null,
                   "Children": [
@@ -11659,6 +11938,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": false,
+                  "GraphsPerPage": 6,
                   "Name": "AllGraphs",
                   "ResourceName": null,
                   "Children": [
@@ -12244,6 +12524,9 @@
                   "ConstantsFile": null,
                   "FileName": "KelleyNov2021.met",
                   "ExcelWorkSheetName": "",
+                  "Latitude": 42.01,
+                  "Tav": 9.349359,
+                  "Amp": 29.69254,
                   "Name": "Weather",
                   "ResourceName": null,
                   "Children": [],
@@ -13345,14 +13628,6 @@
                           "ReadOnly": false
                         },
                         {
-                          "$type": "Models.Soils.CERESSoilTemperature, Models",
-                          "Name": "Temperature",
-                          "ResourceName": null,
-                          "Children": [],
-                          "Enabled": true,
-                          "ReadOnly": false
-                        },
-                        {
                           "$type": "Models.Soils.Nutrients.Nutrient, Models",
                           "Name": "Nutrient",
                           "ResourceName": "Nutrient",
@@ -13636,6 +13911,16 @@
                           "Children": [],
                           "Enabled": true,
                           "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilTemp.SoilTemperature, Models",
+                          "Thickness": null,
+                          "InitialValues": null,
+                          "Name": "Temperature",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
                         }
                       ],
                       "Enabled": true,
@@ -13690,6 +13975,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Graphs",
                   "ResourceName": null,
                   "Children": [
@@ -13991,6 +14277,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": false,
+                  "GraphsPerPage": 6,
                   "Name": "AllGraphs",
                   "ResourceName": null,
                   "Children": [
@@ -14498,12 +14785,14 @@
     {
       "$type": "Models.Core.Folder, Models",
       "ShowInDocs": false,
+      "GraphsPerPage": 6,
       "Name": "Sensibility",
       "ResourceName": null,
       "Children": [
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": true,
+          "GraphsPerPage": 6,
           "Name": "LowerBoundaryConditions",
           "ResourceName": null,
           "Children": [
@@ -14585,8 +14874,11 @@
                     {
                       "$type": "Models.Climate.Weather, Models",
                       "ConstantsFile": null,
-                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln",
+                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln.met",
                       "ExcelWorkSheetName": "",
+                      "Latitude": -43.624,
+                      "Tav": 11.4,
+                      "Amp": 11.5,
                       "Name": "Weather",
                       "ResourceName": null,
                       "Children": [],
@@ -15959,6 +16251,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Plots",
                   "ResourceName": null,
                   "Children": [
@@ -16237,6 +16530,7 @@
                     {
                       "$type": "Models.Core.Folder, Models",
                       "ShowInDocs": false,
+                      "GraphsPerPage": 6,
                       "Name": "NotInDoco",
                       "ResourceName": null,
                       "Children": [
@@ -16667,6 +16961,7 @@
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": true,
+          "GraphsPerPage": 6,
           "Name": "PotentialLowerBoundaryCondition",
           "ResourceName": null,
           "Children": [
@@ -16760,8 +17055,11 @@
                     {
                       "$type": "Models.Climate.Weather, Models",
                       "ConstantsFile": null,
-                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln",
+                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln.met",
                       "ExcelWorkSheetName": "",
+                      "Latitude": -43.624,
+                      "Tav": 11.4,
+                      "Amp": 11.5,
                       "Name": "Weather",
                       "ResourceName": null,
                       "Children": [],
@@ -18037,6 +18335,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Plots",
                   "ResourceName": null,
                   "Children": [
@@ -18315,6 +18614,7 @@
                     {
                       "$type": "Models.Core.Folder, Models",
                       "ShowInDocs": false,
+                      "GraphsPerPage": 6,
                       "Name": "NotInDoco",
                       "ResourceName": null,
                       "Children": [
@@ -18609,6 +18909,7 @@
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": true,
+          "GraphsPerPage": 6,
           "Name": "SurfaceBoundaryConditions",
           "ResourceName": null,
           "Children": [
@@ -18700,8 +19001,11 @@
                     {
                       "$type": "Models.Climate.Weather, Models",
                       "ConstantsFile": null,
-                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln",
+                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln.met",
                       "ExcelWorkSheetName": "",
+                      "Latitude": -43.624,
+                      "Tav": 11.4,
+                      "Amp": 11.5,
                       "Name": "Weather",
                       "ResourceName": null,
                       "Children": [],
@@ -19724,6 +20028,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Plots",
                   "ResourceName": null,
                   "Children": [
@@ -19866,6 +20171,7 @@
                     {
                       "$type": "Models.Core.Folder, Models",
                       "ShowInDocs": false,
+                      "GraphsPerPage": 6,
                       "Name": "NotInDoco",
                       "ResourceName": null,
                       "Children": [
@@ -20500,6 +20806,7 @@
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": true,
+          "GraphsPerPage": 6,
           "Name": "TileDrainage",
           "ResourceName": null,
           "Children": [
@@ -20563,8 +20870,11 @@
                     {
                       "$type": "Models.Climate.Weather, Models",
                       "ConstantsFile": null,
-                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln",
+                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln.met",
                       "ExcelWorkSheetName": "",
+                      "Latitude": -43.624,
+                      "Tav": 11.4,
+                      "Amp": 11.5,
                       "Name": "Weather",
                       "ResourceName": null,
                       "Children": [],
@@ -21941,6 +22251,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Plots",
                   "ResourceName": null,
                   "Children": [
@@ -22219,6 +22530,7 @@
                     {
                       "$type": "Models.Core.Folder, Models",
                       "ShowInDocs": false,
+                      "GraphsPerPage": 6,
                       "Name": "Folder",
                       "ResourceName": null,
                       "Children": [
@@ -22529,8 +22841,11 @@
                     {
                       "$type": "Models.Climate.Weather, Models",
                       "ConstantsFile": null,
-                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln",
+                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln.met",
                       "ExcelWorkSheetName": "",
+                      "Latitude": -43.624,
+                      "Tav": 11.4,
+                      "Amp": 11.5,
                       "Name": "Weather",
                       "ResourceName": null,
                       "Children": [],
@@ -23907,6 +24222,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Plots",
                   "ResourceName": null,
                   "Children": [
@@ -24185,6 +24501,7 @@
                     {
                       "$type": "Models.Core.Folder, Models",
                       "ShowInDocs": false,
+                      "GraphsPerPage": 6,
                       "Name": "NotInDoco",
                       "ResourceName": null,
                       "Children": [
@@ -24563,8 +24880,11 @@
                     {
                       "$type": "Models.Climate.Weather, Models",
                       "ConstantsFile": null,
-                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln",
+                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln.met",
                       "ExcelWorkSheetName": "",
+                      "Latitude": -43.624,
+                      "Tav": 11.4,
+                      "Amp": 11.5,
                       "Name": "Weather",
                       "ResourceName": null,
                       "Children": [],
@@ -25941,6 +26261,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Plots",
                   "ResourceName": null,
                   "Children": [
@@ -26543,6 +26864,7 @@
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": false,
+          "GraphsPerPage": 6,
           "Name": "SoluteMassBalanceTesting",
           "ResourceName": null,
           "Children": [
@@ -28411,6 +28733,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": true,
+                  "GraphsPerPage": 6,
                   "Name": "Plots",
                   "ResourceName": null,
                   "Children": [
@@ -28689,6 +29012,7 @@
                     {
                       "$type": "Models.Core.Folder, Models",
                       "ShowInDocs": false,
+                      "GraphsPerPage": 6,
                       "Name": "NotInDoco",
                       "ResourceName": null,
                       "Children": [
@@ -29139,8 +29463,11 @@
                     {
                       "$type": "Models.Climate.Weather, Models",
                       "ConstantsFile": null,
-                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln",
+                      "FileName": "../../../Examples/WeatherFiles/NZ_Lincoln.met",
                       "ExcelWorkSheetName": "",
+                      "Latitude": -43.624,
+                      "Tav": 11.4,
+                      "Amp": 11.5,
                       "Name": "Weather",
                       "ResourceName": null,
                       "Children": [],
@@ -30719,6 +31046,7 @@
                 {
                   "$type": "Models.Core.Folder, Models",
                   "ShowInDocs": false,
+                  "GraphsPerPage": 6,
                   "Name": "Plots",
                   "ResourceName": null,
                   "Children": [
@@ -30861,6 +31189,7 @@
                     {
                       "$type": "Models.Core.Folder, Models",
                       "ShowInDocs": false,
+                      "GraphsPerPage": 6,
                       "Name": "NotInDoco",
                       "ResourceName": null,
                       "Children": [
@@ -30951,6 +31280,7 @@
         {
           "$type": "Models.Core.Folder, Models",
           "ShowInDocs": true,
+          "GraphsPerPage": 6,
           "Name": "InitialConditions",
           "ResourceName": null,
           "Children": [
@@ -33245,6 +33575,7 @@
     {
       "$type": "Models.Core.Folder, Models",
       "ShowInDocs": false,
+      "GraphsPerPage": 6,
       "Name": "CriticalTesting",
       "ResourceName": null,
       "Children": [
@@ -33287,6 +33618,9 @@
               "ConstantsFile": null,
               "FileName": "Hudson.met",
               "ExcelWorkSheetName": null,
+              "Latitude": -31.52,
+              "Tav": 15.0,
+              "Amp": 15.0,
               "Name": "Weather",
               "ResourceName": null,
               "Children": [],
@@ -34025,14 +34359,6 @@
                       "ReadOnly": false
                     },
                     {
-                      "$type": "Models.Soils.CERESSoilTemperature, Models",
-                      "Name": "Temperature",
-                      "ResourceName": null,
-                      "Children": [],
-                      "Enabled": true,
-                      "ReadOnly": false
-                    },
-                    {
                       "$type": "Models.Soils.Swim3, Models",
                       "Salb": 0.13,
                       "CN2Bare": 75.0,
@@ -34444,6 +34770,16 @@
                       "Children": [],
                       "Enabled": true,
                       "ReadOnly": false
+                    },
+                    {
+                      "$type": "Models.Soils.SoilTemp.SoilTemperature, Models",
+                      "Thickness": null,
+                      "InitialValues": null,
+                      "Name": "Temperature",
+                      "ResourceName": null,
+                      "Children": [],
+                      "Enabled": true,
+                      "ReadOnly": false
                     }
                   ],
                   "Enabled": true,
@@ -34484,6 +34820,7 @@
             {
               "$type": "Models.Core.Folder, Models",
               "ShowInDocs": false,
+              "GraphsPerPage": 6,
               "Name": "Plots",
               "ResourceName": null,
               "Children": [
@@ -34744,6 +35081,9 @@
                   "ConstantsFile": null,
                   "FileName": "Hudson.met",
                   "ExcelWorkSheetName": null,
+                  "Latitude": -31.52,
+                  "Tav": 15.0,
+                  "Amp": 15.0,
                   "Name": "Weather",
                   "ResourceName": null,
                   "Children": [],
@@ -35482,14 +35822,6 @@
                           "ReadOnly": false
                         },
                         {
-                          "$type": "Models.Soils.CERESSoilTemperature, Models",
-                          "Name": "Temperature",
-                          "ResourceName": null,
-                          "Children": [],
-                          "Enabled": true,
-                          "ReadOnly": false
-                        },
-                        {
                           "$type": "Models.Soils.Swim3, Models",
                           "Salb": 0.13,
                           "CN2Bare": 75.0,
@@ -35901,6 +36233,16 @@
                           "Children": [],
                           "Enabled": true,
                           "ReadOnly": false
+                        },
+                        {
+                          "$type": "Models.Soils.SoilTemp.SoilTemperature, Models",
+                          "Thickness": null,
+                          "InitialValues": null,
+                          "Name": "Temperature",
+                          "ResourceName": null,
+                          "Children": [],
+                          "Enabled": true,
+                          "ReadOnly": false
                         }
                       ],
                       "Enabled": true,
@@ -36087,6 +36429,7 @@
             {
               "$type": "Models.Core.Folder, Models",
               "ShowInDocs": false,
+              "GraphsPerPage": 6,
               "Name": "Plots",
               "ResourceName": null,
               "Children": [
