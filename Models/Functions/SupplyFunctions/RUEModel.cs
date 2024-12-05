@@ -11,7 +11,7 @@ namespace Models.Functions.SupplyFunctions
     /// NOTE: RUE in this model is expressed as g/MJ for a whole plant basis, including both above and below ground growth.
     /// </summary>
     [Serializable]
-    [ValidParent(ParentType = typeof(ILeaf))]
+    [ValidParent(ParentType = typeof(ICanopy))]
     public class RUEModel : Model, IFunction
     {
         /// <summary>The rue</summary>
