@@ -1027,9 +1027,6 @@ namespace Models.PMF.Organs
 
             if (!MathUtilities.IsPositive(dltSenescedBiomass)) return;
 
-            double slnToday = MathUtilities.Divide(Live.N, laiToday, 0.0);
-            DltSenescedN += DltSenescedLai * Math.Max(slnToday, 0.0);
-
             if (MathUtilities.IsGreaterThan(DltSenescedN, Live.N))
                 throw new Exception($"Attempted to senesce more N than exists on leaf '{Name}'");
 
