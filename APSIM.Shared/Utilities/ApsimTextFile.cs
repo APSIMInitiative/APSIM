@@ -1,5 +1,5 @@
 // An APSIMInputFile is either a ".met" file or a ".out" file.
-// They are both text files that share the same format. 
+// They are both text files that share the same format.
 // These classes are used to read/write these files and create an object instance of them.
 using System;
 using System.Collections.Generic;
@@ -93,6 +93,9 @@ namespace APSIM.Shared.Utilities
 
         /// <summary>The _ constants</summary>
         private List<ApsimConstant> _Constants = new List<ApsimConstant>();
+
+        /// <summary>Hello</summary>
+        private Dictionary<string, double> _ConstantValues = new();
 
         /// <summary>Is the file a CSV file</summary>
         public bool IsCSVFile { get; set; } = false;
@@ -212,6 +215,7 @@ namespace APSIM.Shared.Utilities
         private void Open()
         {
             _Constants.Clear();
+            _ConstantValues.Clear();
             ReadApsimHeader(inStreamReader);
             if (Headings != null)
             {
@@ -300,10 +304,14 @@ namespace APSIM.Shared.Utilities
         /// <returns>Returns a constant as double.</returns>
         public double ConstantAsDouble(string constantName)
         {
-            ApsimConstant constant = Constant(constantName);
-            if (constant == null)
-                throw new Exception($"Constant {constantName} does not exist");
-            return Convert.ToDouble(constant.Value, CultureInfo.InvariantCulture);
+            if (!_ConstantValues.ContainsKey(constantName))
+            {
+                ApsimConstant constant = Constant(constantName);
+                if (constant == null)
+                    throw new Exception($"Constant {constantName} does not exist");
+                _ConstantValues[constantName] = Convert.ToDouble(constant.Value, CultureInfo.InvariantCulture);
+            }
+            return _ConstantValues[constantName];
         }
 
         /// <summary>
@@ -318,6 +326,9 @@ namespace APSIM.Shared.Utilities
                 if (StringUtilities.StringsAreEqual(c.Name, constantName))
                     c.Value = constantValue;
             }
+            // This may be changing from a number to something else, hold off on
+            // conversion until requested via ConstantAsDouble.
+            _ConstantValues.Remove(constantName);
         }
 
         /// <summary>
@@ -556,7 +567,7 @@ namespace APSIM.Shared.Utilities
                 else
                     Types[w] = StringUtilities.DetermineType(words[w], Units[w]);
 
-                // If we can parse as a DateTime, but don't yet have an explicit format, try to determine 
+                // If we can parse as a DateTime, but don't yet have an explicit format, try to determine
                 // the correct format and make it explicit.
                 if (Types[w] == typeof(DateTime) && (Units[w] == "" || Units[w] == "()"))
                 {
