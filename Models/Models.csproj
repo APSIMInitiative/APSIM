@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <BaseOutputPath>../bin</BaseOutputPath>
     <ApplicationIcon />
     <StartupObject />
@@ -22,24 +22,24 @@
   </PropertyGroup>  
 
   <ItemGroup>
-    <PackageReference Include="NetMQ" Version="4.0.1.12" />
-    <PackageReference Include="MessagePack" Version="2.5.187" />
+    <PackageReference Include="NetMQ" Version="4.0.1.13" />
+    <PackageReference Include="MessagePack" Version="2.5.192" />
     <ProjectReference Include="..\APSIM.Shared\APSIM.Shared.csproj" />
-    <PackageReference Include="System.Windows.Extensions" Version="6.0.0.0" />
-    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+    <PackageReference Include="System.Windows.Extensions" Version="8.0.0" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.CodeDom" Version="6.0.0" />
+    <PackageReference Include="System.CodeDom" Version="8.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
-    <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.5.0" />
-    <PackageReference Include="MigraDocCore.DocumentObjectModel" Version="1.3.47" />
-    <PackageReference Include="MigraDocCore.Rendering" Version="1.3.47" />
-    <PackageReference Include="PdfSharpCore" Version="1.3.47" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.12.0" />
+    <PackageReference Include="MigraDocCore.DocumentObjectModel" Version="1.3.65" />
+    <PackageReference Include="MigraDocCore.Rendering" Version="1.3.65" />
+    <PackageReference Include="PdfSharpCore" Version="1.3.65" />
 
     <EmbeddedResource Include="Resources\**" />
     <None Remove="Resources\**" />

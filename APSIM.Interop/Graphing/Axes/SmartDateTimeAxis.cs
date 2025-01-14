@@ -14,10 +14,10 @@ namespace APSIM.Interop.Graphing.Axes
     /// </remarks>
     public class SmartDateTimeAxis : DateTimeAxis
     {
-        protected override double CalculateActualInterval(double availableSize, double maxIntervalSize)
+        protected override double CalculateActualInterval(double availableSize, double maxIntervalSize, double minIntervalCount, double maxIntervalCount)
         {
-            DateTime min = ToDateTime(ActualMinimum);
-            DateTime max = ToDateTime(ActualMaximum);
+            DateTime min = ToDateTime(ActualMinimum, DefaultPrecision);
+            DateTime max = ToDateTime(ActualMaximum, DefaultPrecision);
 
             (DateTimeIntervalType interval, string format) = CalculateInterval(min, max);
             IntervalType = interval;
@@ -25,7 +25,7 @@ namespace APSIM.Interop.Graphing.Axes
             if (!string.IsNullOrEmpty(format))
                 this.StringFormat = format;
 
-            return base.CalculateActualInterval(availableSize, maxIntervalSize);
+            return base.CalculateActualInterval(availableSize, maxIntervalSize, minIntervalCount, maxIntervalCount);
         }
 
         /// <summary>

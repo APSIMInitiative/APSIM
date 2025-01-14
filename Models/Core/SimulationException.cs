@@ -20,17 +20,6 @@ namespace Models.Core
         public string FileName { get; private set; }
 
         /// <summary>
-        /// Constructor provided for binary deserialization.
-        /// </summary>
-        /// <param name="info">Serialization info.</param>
-        /// <param name="context">Streaming context.</param>
-        public SimulationException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-            SimulationName = info.GetString(nameof(SimulationName));
-            FileName = info.GetString(nameof(FileName));
-        }
-
-        /// <summary>
         /// /// Create a <see cref="SimulationException" /> instance.
         /// </summary>
         /// <param name="message">Error message.</param>
@@ -61,18 +50,6 @@ namespace Models.Core
         public override string ToString()
         {
             return $"ERROR in file: {FileName}{Environment.NewLine}Simulation name: {SimulationName}{Environment.NewLine}{base.ToString()}";
-        }
-
-        /// <summary>
-        /// Get object data for serialization.
-        /// </summary>
-        /// <param name="info">Serialization info.</param>
-        /// <param name="context">Streaming context.</param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-            info.AddValue(nameof(SimulationName), SimulationName);
-            info.AddValue(nameof(FileName), FileName);
         }
     }
 }

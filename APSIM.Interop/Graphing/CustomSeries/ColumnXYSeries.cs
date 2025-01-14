@@ -53,8 +53,8 @@
                 double halfBarWidth = 0.4;
                 if (this.XAxis.ActualStringFormat != null && this.XAxis.ActualStringFormat.Contains("yyyy"))
                 {
-                    DateTime d1 = DateTimeAxis.ToDateTime(this.XAxis.ActualMinimum);
-                    DateTime d2 = DateTimeAxis.ToDateTime(this.XAxis.ActualMinimum + 1);
+                    DateTime d1 = DateTimeAxis.ToDateTime(this.XAxis.ActualMinimum, DateTimeAxis.DefaultPrecision);
+                    DateTime d2 = DateTimeAxis.ToDateTime(this.XAxis.ActualMinimum + 1, DateTimeAxis.DefaultPrecision);
                     halfBarWidth = (d2 - d1).Days / 2.0;
                 }
 

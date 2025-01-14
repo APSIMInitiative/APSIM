@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <BaseOutputPath>../bin</BaseOutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	<WarningsNotAsErrors>NU1902;NU1903</WarningsNotAsErrors>
@@ -16,20 +16,20 @@
     <ProjectReference Include="../APSIM.Shared/APSIM.Shared.csproj" />
     <ProjectReference Include="../Models/Models.csproj" />
     <PackageReference Include="CairoSharp" Version="3.24.24.38" />
-    <PackageReference Include="Mapsui" Version="4.1.7" />
-    <PackageReference Include="Mapsui.Nts" Version="4.1.7" />
-    <PackageReference Include="Mapsui.Rendering.Skia" Version="4.1.7" />
-    <PackageReference Include="Mapsui.Tiling" Version="4.1.7" />
-    <PackageReference Include="Markdig" Version="0.31.0" />
+    <PackageReference Include="Mapsui" Version="4.1.8" />
+    <PackageReference Include="Mapsui.Nts" Version="4.1.8" />
+    <PackageReference Include="Mapsui.Rendering.Skia" Version="4.1.8" />
+    <PackageReference Include="Mapsui.Tiling" Version="4.1.8" />
+    <PackageReference Include="Markdig" Version="0.38.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="ProjNET4GeoAPI" Version="1.4.1" />
     <EmbeddedResource Include="Resources\**" />
-    <PackageReference Include="SkiaSharp" Version="2.88.8" />
+    <PackageReference Include="SkiaSharp" Version="2.88.9" />
     <None Remove="Resources\Images\Swim-layers.png" />
-    <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
-    <PackageReference Include="OxyPlot.SkiaSharp" Version="2.1.2" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.8" />
-    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="2.8.2.3" />
+    <PackageReference Include="OxyPlot.Core" Version="2.2.0" />
+    <PackageReference Include="OxyPlot.SkiaSharp" Version="2.2.0" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.9" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" Version="8.3.0" />
   </ItemGroup>
 
   <ItemGroup>

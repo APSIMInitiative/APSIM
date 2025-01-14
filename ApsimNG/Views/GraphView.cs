@@ -829,7 +829,7 @@ namespace UserInterface.Views
                 if (xIsFloatingPoint)
                     index = MathUtilities.SafeIndexOf(x.Cast<double>().ToList(), xVal);
                 else if (xType == typeof(DateTime))
-                    index = Array.IndexOf(x, DateTimeAxis.ToDateTime(xVal));
+                    index = Array.IndexOf(x, DateTimeAxis.ToDateTime(xVal, DateTimeAxis.DefaultPrecision));
                 else
                     index = i; // Array.IndexOf(x, xVal); // this is unlikely to work
 

@@ -286,7 +286,7 @@ namespace UserInterface.Views
                 if (double.IsNaN(value))
                     entryMin.Text = string.Empty;
                 else if (isDate)
-                    entryMin.Text = DateUtilities.ValidateDateString(DateTimeAxis.ToDateTime(value).ToShortDateString());
+                    entryMin.Text = DateUtilities.ValidateDateString(DateTimeAxis.ToDateTime(value, DateTimeAxis.DefaultPrecision).ToShortDateString());
                 else
                     entryMin.Text = value.ToString();
             }
@@ -304,7 +304,7 @@ namespace UserInterface.Views
                 if (double.IsNaN(value))
                     entryMax.Text = string.Empty;
                 else if (isDate)
-                    entryMax.Text = DateUtilities.ValidateDateString(DateTimeAxis.ToDateTime(value).ToShortDateString());
+                    entryMax.Text = DateUtilities.ValidateDateString(DateTimeAxis.ToDateTime(value, DateTimeAxis.DefaultPrecision).ToShortDateString());
                 else
                     entryMax.Text = value.ToString();
             }

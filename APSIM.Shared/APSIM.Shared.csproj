@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <BaseOutputPath>../bin</BaseOutputPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
@@ -17,18 +17,18 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <PackageReference Include="DocumentFormat.OpenXml" Version="2.19.0" />
-    <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
-    <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.0.0" />
-    <PackageReference Include="Mapsui" Version="4.1.7" />
-    <PackageReference Include="Mapsui.Nts" Version="4.1.7" />
-    <PackageReference Include="Mapsui.Rendering.Skia" Version="4.1.7" />
-    <PackageReference Include="Mapsui.Tiling" Version="4.1.7" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0" />
+    <PackageReference Include="FirebirdSql.Data.FirebirdClient" Version="10.3.1" />
+    <PackageReference Include="Mapsui" Version="4.1.8" />
+    <PackageReference Include="Mapsui.Nts" Version="4.1.8" />
+    <PackageReference Include="Mapsui.Rendering.Skia" Version="4.1.8" />
+    <PackageReference Include="Mapsui.Tiling" Version="4.1.8" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="SkiaSharp" Version="2.88.8" />
-    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.8" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-    <PackageReference Include="Docker.DotNet" Version="3.125.13" />
+    <PackageReference Include="SkiaSharp" Version="2.88.9" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.9" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.11" />
+    <PackageReference Include="Docker.DotNet" Version="3.125.15" />
   </ItemGroup>
   
   <ItemGroup>

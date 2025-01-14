@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <BaseOutputPath>../bin</BaseOutputPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ApsimLogo.ico</ApplicationIcon>
@@ -36,35 +36,35 @@
     <ProjectReference Include="..\Gtk.Sheet\Gtk.Sheet.csproj" />
 	
     <!-- Shared package references -->
-    <PackageReference Include="ClosedXML" Version="0.100.3" />
+    <PackageReference Include="ClosedXML" Version="0.104.2" />
     <PackageReference Include="Microsoft.Azure.Batch" Version="15.4.0" />
     <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.2.3" />
     <PackageReference Include="Microsoft.Azure.Storage.Common" Version="11.2.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="4.5.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.5.0" />
-    <PackageReference Include="OxyPlot.SkiaSharp" Version="2.1.2" />
+    <PackageReference Include="Microsoft.CodeAnalysis" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Features" Version="4.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.12.0" />
+    <PackageReference Include="OxyPlot.SkiaSharp" Version="2.2.0" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.CodeDom" Version="6.0.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />
-    <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
+    <PackageReference Include="System.CodeDom" Version="8.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.1" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
     <PackageReference Include="ISO3166" Version="1.0.4" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     <PackageReference Include="Microsoft.Toolkit.Parsers" Version="6.1.1" />
     <PackageReference Include="Markdig" Version="0.38.0" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.0" />
     <PackageReference Include="GtkSharp" Version="3.24.24.38" />
     <PackageReference Include="GtkSourceSharp" Version="3.24.24.38" />
-    <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
+    <PackageReference Include="OxyPlot.Core" Version="2.2.0" />
     <PackageReference Include="OxyPlot.GtkSharp3" Version="2.1.0-Preview1" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-	<PackageReference Include="System.Windows.Extensions" Version="6.0.0.0" />  
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.11" />
+	<PackageReference Include="System.Windows.Extensions" Version="8.0.0" />  
   </ItemGroup>
   
   <ItemGroup>

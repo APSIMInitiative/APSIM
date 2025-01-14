@@ -17,7 +17,7 @@ namespace Models.CLEM.Groupings
     [Description("Defines the feed value for specific individuals from the labour pool")]
     [Version(1, 0, 1, "")]
     [HelpUri(@"Content/Features/Filters/Groups/LabourFeedGroup.htm")]
-    public class LabourFeedGroup : FilterGroup<LabourType>
+    public class LabourFeedGroup : LabourGroup
     {
         /// <summary>
         /// Value to supply for each month

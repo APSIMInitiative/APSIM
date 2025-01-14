@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <AssemblyName>ApsimZMQServer</AssemblyName>
     <BaseOutputPath>../../bin</BaseOutputPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
@@ -14,8 +14,8 @@
   </PropertyGroup>  
 
   <ItemGroup>
-    <PackageReference Include="MessagePack" Version="2.5.187" />
-    <PackageReference Include="NetMQ" Version="4.0.1.12" />
+    <PackageReference Include="MessagePack" Version="2.5.192" />
+    <PackageReference Include="NetMQ" Version="4.0.1.13" />
     <ProjectReference Include="../../Models/Models.csproj" />
     <ProjectReference Include="../../APSIM.Shared/APSIM.Shared.csproj" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
