@@ -1102,6 +1102,8 @@ namespace Models.PMF.Organs
         /// <param name="nitrogen">The nitrogen allocation</param>
         public virtual void SetNitrogenAllocation(BiomassAllocationType nitrogen)
         {
+            double StartN = startLive.StructuralN + Live.MetabolicN + Live.StorageN;
+
             Live.StructuralN += nitrogen.Structural;
             Live.StorageN += nitrogen.Storage;
             Live.MetabolicN += nitrogen.Metabolic;
@@ -1111,21 +1113,23 @@ namespace Models.PMF.Organs
             Allocated.MetabolicN += nitrogen.Metabolic;
 
             // Retranslocation
-            if (MathUtilities.IsGreaterThan(nitrogen.Retranslocation, startLive.StorageN + startLive.MetabolicN - nitrogen.Reallocation))
-                throw new Exception("N retranslocation exceeds storage + metabolic nitrogen in organ: " + Name);
             double storageNRetranslocation = Math.Min(nitrogen.Retranslocation, startLive.StorageN * (1 - senescenceRate.Value()) * nRetranslocationFactor.Value());
             Live.StorageN -= storageNRetranslocation;
-            Live.MetabolicN -= (nitrogen.Retranslocation - storageNRetranslocation);
+            Live.MetabolicN -= Math.Max(0, nitrogen.Retranslocation - storageNRetranslocation);
             Allocated.StorageN -= nitrogen.Retranslocation;
 
             // Reallocation
-            if (MathUtilities.IsGreaterThan(nitrogen.Reallocation, startLive.StorageN + startLive.MetabolicN))
-                throw new Exception("N reallocation exceeds storage + metabolic nitrogen in organ: " + Name);
             double storageNReallocation = Math.Min(nitrogen.Reallocation, startLive.StorageN * senescenceRate.Value() * nReallocationFactor.Value());
             Live.StorageN -= storageNReallocation;
-            Live.MetabolicN -= (nitrogen.Reallocation - storageNReallocation);
+            Live.MetabolicN -= Math.Max(0, nitrogen.Reallocation - storageNReallocation);
             Allocated.StorageN -= nitrogen.Reallocation;
-        }
 
+            double endN = Live.StructuralN + Live.MetabolicN + Live.StorageN;
+            double checkValue = StartN + nitrogen.Structural + nitrogen.Metabolic + nitrogen.Storage -
+                                nitrogen.Reallocation - nitrogen.Retranslocation - nitrogen.Respired;
+            double extentOfError = Math.Abs(endN - checkValue);
+            if (extentOfError > 0.00000001)
+                throw new Exception(Name + "Some Leaf N was not allocated.");
+        }
     }
 }
