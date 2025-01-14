@@ -109,6 +109,26 @@
               "Children": [],
               "Enabled": true,
               "ReadOnly": false
+            },
+            {
+              "$type": "Models.PMF.Cultivar, Models",
+              "Command": [
+                "[Phenology].Dormancy.Target.BaseTarget.FixedValue = 88.74292",
+                "[Phenology].Dormancy.Progression.Response.Xo.FixedValue = 15.07995",
+                "[Phenology].Dormancy.Progression.Response.b.FixedValue = -1.27593",
+                "[Phenology].Budding.Target.FixedValue = 767.6113",
+                "[Phenology].Budding.Progression.Response.X = 0,0.353281,10.353281,20.353281",
+                "[Phenology].ThermalTime.Response.MinTemp = 2.51",
+                "[Phenology].ThermalTime.Response.OptTemp = 22.245",
+                "[Phenology].ThermalTime.Response.MaxTemp = 40.316",
+                "[Phenology].Flowering.Target.FixedValue = 42.007",
+                "[Phenology].BerryDevelopment.Target.FixedValue = 50.84"
+              ],
+              "Name": "Syrah",
+              "ResourceName": null,
+              "Children": [],
+              "Enabled": true,
+              "ReadOnly": false
             }
           ],
           "Enabled": true,
