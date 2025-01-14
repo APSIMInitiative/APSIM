@@ -20,8 +20,6 @@ namespace Models.PMF
 
     public class Organ : Model, IOrgan, IHasDamageableBiomass
     {
-        ///0. Redundant satisification of IOrgan
-        ///--------------------------------------------------------------------------------------------------
         /// <summary>Harvest the organ.</summary>
         /// <returns>The amount of biomass (live+dead) removed from the plant (g/m2).</returns>
         public double Harvest()
@@ -386,6 +384,15 @@ namespace Models.PMF
                 if (RootNetworkObject != null)
                     RootNetworkObject.InitailiseNetwork(Live);
             }
+        }
+
+        /// <summary>Called when crop is harvested</summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        [EventSubscribe("PostHarvesting")]
+        protected void OnPostHarvesting(object sender, EventArgs e)
+        {
+            Harvest();
         }
 
         /// <summary>

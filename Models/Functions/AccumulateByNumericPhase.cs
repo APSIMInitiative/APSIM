@@ -113,8 +113,8 @@ namespace Models.Functions
         /// <summary>Called when [cut].</summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        [EventSubscribe("Harvesting")]
-        private void OnHarvest(object sender, EventArgs e)
+        [EventSubscribe("PostHarvesting")]
+        private void OnPostHarvesting(object sender, EventArgs e)
         {
             AccumulatedValue -= FractionRemovedOnHarvest * AccumulatedValue;
         }

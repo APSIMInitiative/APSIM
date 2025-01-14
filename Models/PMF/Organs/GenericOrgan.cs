@@ -563,5 +563,14 @@ namespace Models.PMF.Organs
 
             Clear();
         }
+
+        /// <summary>Called when crop is harvested</summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        [EventSubscribe("PostHarvesting")]
+        protected void OnPostHarvesting(object sender, EventArgs e)
+        {
+            Harvest();
+        }
     }
 }
