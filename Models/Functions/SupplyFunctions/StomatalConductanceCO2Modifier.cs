@@ -1,4 +1,5 @@
 ﻿using System;
+using Models.Climate;
 using Models.Core;
 using Models.Interfaces;
 
@@ -37,13 +38,13 @@ namespace Models.Functions.SupplyFunctions
             if (temp >= 50)
                 throw new Exception("Average daily temperature too high for Stomatal Conductance CO2 Function");
 
-            if (MetData.CO2 == 350)
+            if (MetData.CO2 == WeatherConstants.DEFAULT_CO2)
                 return 1.0;
             else
             {
                 double CP = (163.0 - temp) / (5.0 - 0.1 * temp);  //co2 compensation point (ppm)
                 double first = (MetData.CO2 - CP);
-                double second = (350.0 - CP);
+                double second = (WeatherConstants.DEFAULT_CO2 - CP);
                 return PhotosynthesisCO2Modifier.Value() / (first / second);
             }
         }

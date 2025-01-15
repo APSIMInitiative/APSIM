@@ -115,7 +115,7 @@ namespace Models.Climate
         public double Wind { get; set; }
 
         /// <summary>
-        /// Gets or sets the CO2 level. If not specified in the weather file the default is 350.
+        /// Gets or sets the CO2 level. If not specified in the weather file the default is WeatherConstants.DEFAULT_CO2.
         /// </summary>
         [Description("CO2 concentration of the air")]
         [Units("ppm")]

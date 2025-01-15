@@ -1,4 +1,5 @@
 using System;
+using Models.Climate;
 using Models.Core;
 
 namespace Models.Functions.SupplyFunctions
@@ -33,7 +34,7 @@ namespace Models.Functions.SupplyFunctions
             double CO2PhotoCmp0, CO2PhotoCmp, EffPAR;
 
             //Efect of CO2 concentration
-            if (fCO2 < 0.0) fCO2 = 350;
+            if (fCO2 < 0.0) fCO2 = WeatherConstants.DEFAULT_CO2;
 
             //Check wheather a C3 or C4 crop
             if (pathway == "C3")   //C3 plants

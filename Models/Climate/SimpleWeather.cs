@@ -316,7 +316,7 @@ namespace Models.Climate
 
 
         /// <summary>
-        /// Gets or sets the CO2 level. If not specified in the weather file the default is 350.
+        /// Gets or sets the CO2 level. If not specified in the weather file the default is WeatherConstants.DEFAULT_CO2.
         /// </summary>
         [JsonIgnore]
         public double CO2 { get; set; }
@@ -461,7 +461,7 @@ namespace Models.Climate
             this.DiffuseFractionIndex = 0;
             this.dayLengthIndex = 0;
             if (CO2 == 0)
-                this.CO2 = 350;
+                this.CO2 = WeatherConstants.DEFAULT_CO2;
             if (AirPressure == 0)
                 this.AirPressure = 1010;
             if (DiffuseFraction == 0)

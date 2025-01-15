@@ -249,7 +249,7 @@ namespace Models.PMF.Organs
         public double Gsmax => Gsmax350 * FRGR * stomatalConductanceCO2Modifier.Value();
 
         /// <summary>Gets or sets the gsmax.</summary>
-        [Description("Maximum stomatal conductance at CO2 concentration of 350 ppm (m/s)")]
+        [Description("Maximum stomatal conductance at CO2 concentration of 420 ppm (m/s)")]
         public double Gsmax350 { get; set; }
 
         /// <summary>Gets or sets the R50.</summary>
