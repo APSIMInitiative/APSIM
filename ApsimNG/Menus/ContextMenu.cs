@@ -872,13 +872,22 @@ namespace UserInterface.Presenters
                                 c.ReadOnly = !hidden;
                         }
 
-                        // Delete hidden models from tree control and refresh tree control.
-                        foreach (IModel child in model.Children)
-                            if (child.IsHidden)
-                                explorerPresenter.Tree.Delete(child.FullPath);
-                        explorerPresenter.PopulateContextMenu(model.FullPath);
-                        explorerPresenter.RefreshNode(model);
                     }
+                    else
+                    {
+                        foreach (IModel child in model.Children)
+                        {
+                            child.IsHidden = !child.IsHidden;
+                        }
+                    }
+
+                    // Delete hidden models from tree control and refresh tree control.
+                    foreach (IModel child in model.Children)
+                        if (child.IsHidden)
+                            explorerPresenter.Tree.Delete(child.FullPath);
+
+                    explorerPresenter.PopulateContextMenu(model.FullPath);
+                    explorerPresenter.RefreshNode(model);
                 }
             }
             catch (Exception err)
