@@ -19,7 +19,7 @@ def test_proto2(apsim_dir):
     
     apsim['process'] = subprocess.Popen([
         "/usr/bin/dotnet",
-        f"{apsim_dir}/bin/Debug/net6.0/ApsimZMQServer.dll",
+        f"{apsim_dir}/bin/Debug/net8.0/ApsimZMQServer.dll",
         "-p", apsim['random_port'],
         "-P", "interactive",
         "-f", f"{apsim_dir}/Tests/Simulation/ZMQ-Sync/ZMQ-sync.apsimx"

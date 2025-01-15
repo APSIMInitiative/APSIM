@@ -31,7 +31,7 @@ Apsim may be built with the .NET SDK - currently version 6.0 is required. When b
 
 5. Run apsim
 
-    The outputs may be found under ApsimX/bin. If built in debug mode, they will be in `bin/Debug/net6.0/`. If built in release mode, they will be in `bin/Release/net6.0/`.
+    The outputs may be found under ApsimX/bin. If built in debug mode, they will be in `bin/Debug/net8.0/`. If built in release mode, they will be in `bin/Release/net8.0/`.
 
 	The entrypoint program for the user interface is called `ApsimNG`.
 

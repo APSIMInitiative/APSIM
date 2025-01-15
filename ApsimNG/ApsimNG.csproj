@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <BaseOutputPath>../bin</BaseOutputPath>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon>ApsimLogo.ico</ApplicationIcon>
@@ -11,8 +11,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	<WarningsNotAsErrors>NU1902;NU1903</WarningsNotAsErrors>
-	<NoWarn>CS1591,CS1572</NoWarn>
+    <NoWarn>CS1591,CS1572</NoWarn>
     <ServerGarbageCollection>true</ServerGarbageCollection>
     <SelfContained>false</SelfContained>
     <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>

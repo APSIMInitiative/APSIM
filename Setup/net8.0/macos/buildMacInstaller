@@ -35,7 +35,7 @@ cp "$apsimx/Models/Properties/AssemblyVersion.cs" "$apsimx/ApsimNG/Properties/"
 projects=(ApsimNG Models)
 for project in ${projects[@]}
 do
-    dotnet publish --nologo -f net6.0 -c Release -r osx-x64 $project
+    dotnet publish --nologo -f net8.0 -c Release -r osx-x64 $project
 done
 
 # Now generate the installer.
@@ -59,7 +59,7 @@ then
 fi
 copy "$apsimx/ApsimNG/Resources/world" $appdir/Resources/ApsimNG/Resources/
 copy "$apsimx/ApsimNG/Resources/CommonReportVariables" $appdir/Resources/ApsimNG/Resources/
-copy "$apsimx/bin/Release/net6.0/osx-x64/publish/*" $appdir/Resources/bin/
+copy "$apsimx/bin/Release/net8.0/osx-x64/publish/*" $appdir/Resources/bin/
 copy "$apsimx/APSIM.Documentation/Resources/APSIM.bib" $appdir/Resources/
 copy "$plist" $appdir/
 

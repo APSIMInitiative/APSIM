@@ -6,7 +6,7 @@ Priority: optional
 Maintainer: APSIM Initiative <apsim@csiro.au>
 Homepage: www.apsim.info
 Installed-Size: @Size
-Depends: dotnet-runtime-6.0, gtk-sharp3, libsqlite3-dev, libgtksourceview-4-0, zenity
+Depends: dotnet-runtime-8.0, gtk-sharp3, libsqlite3-dev, libgtksourceview-4-0, zenity
 Description: The Agricultural Production Systems Simulator.
  The Agricultural Production Systems sIMulator (APSIM) is internationally recognised 
  as a highly advanced simulator of agricultural systems. It contains a suite of modules 

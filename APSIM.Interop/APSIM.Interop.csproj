@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <BaseOutputPath>../bin</BaseOutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	<WarningsNotAsErrors>NU1902;NU1903</WarningsNotAsErrors>
-	<SelfContained>false</SelfContained>
+    <SelfContained>false</SelfContained>
   </PropertyGroup>
 
   <PropertyGroup>

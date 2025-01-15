@@ -24,7 +24,7 @@ sed -i -e "s/0\.0\.0\.0/$version/g" "$apsimx/Models/Properties/AssemblyVersion.c
 cp "$apsimx/Models/Properties/AssemblyVersion.cs" "$apsimx/ApsimNG/Properties/"
 
 # Run a dotnet publish command.
-dotnet publish --nologo -f net6.0 -c Release --no-self-contained -r linux-x64 "$apsimx/ApsimX.sln"
+dotnet publish --nologo -f net8.0 -c Release --no-self-contained -r linux-x64 "$apsimx/ApsimX.sln"
 
 # Create data directory. (Delete if it already exists.)
 inst="/usr/local/lib/apsim/$version"
@@ -39,7 +39,7 @@ copy() {  rsync -aq --mkpath --exclude='*.db' --exclude='*.db-wal' --exclude='*.
 cp "$apsimx/APSIM.Documentation/Resources/APSIM.bib" "$apsimx_inst/"
 copy "$apsimx"/ApsimNG/Resources/world/* "$apsimx_inst"/ApsimNG/Resources/world/
 copy "$apsimx"/ApsimNG/Resources/CommonReportVariables/* "$apsimx_inst"/ApsimNG/Resources/CommonReportVariables/
-copy "$apsimx"/bin/Release/net6.0/linux-x64/publish/* "$apsimx_inst"/bin/
+copy "$apsimx"/bin/Release/net8.0/linux-x64/publish/* "$apsimx_inst"/bin/
 copy "$apsimx"/Examples/* "$apsimx_inst"/Examples/
 if [[ -d "$apsimx"/Tests/UnderReview ]];
 then

@@ -166,11 +166,11 @@ namespace CMPServices
         /// <summary>
         /// Contains two unit fields. Used in the array of matching units.
         /// </summary>
-        private struct unit
+        private struct Unit
         {
             public String unit1;
             public String unit2;
-            public unit(String u1, String u2)
+            public Unit(String u1, String u2)
             {
                 unit1 = u1;
                 unit2 = u2;
@@ -181,63 +181,63 @@ namespace CMPServices
         /// "cc/cc","mm/mm" are matching units.
         /// </summary>
         //============================================================================
-        private static unit match1 = new unit("g/cm^3", "Mg/m^3");
+        private static Unit match1 = new Unit("g/cm^3", "Mg/m^3");
         //============================================================================
         /// <summary>
         /// "m^3/m^3", "mm/mm" are matching units.
         /// </summary>
         //============================================================================
-        private static unit match2 = new unit("m^3/m^3", "mm/mm");
+        private static Unit match2 = new Unit("m^3/m^3", "mm/mm");
         //============================================================================
         /// <summary>
         /// "ppm" and "mg/kg" are allowed to match, although "ppm" is invalid
         /// This is a concession to APSIM
         /// </summary>
         //============================================================================
-        private static unit match3 = new unit("ppm", "mg/kg");
+        private static Unit match3 = new Unit("ppm", "mg/kg");
         //============================================================================
         /// <summary>
         /// "g/cc", "Mg/m^3" are matching units, although "cc" is invalid
         /// This is a concession to APSIM
         /// </summary>
         //============================================================================
-        private static unit match4 = new unit("g/cc", "Mg/m^3");
+        private static Unit match4 = new Unit("g/cc", "Mg/m^3");
         //============================================================================
         /// <summary>
         /// "0-1" and "-" match,  as both are dimensionless
         /// </summary>
         //============================================================================
-        private static unit match5 = new unit("0-1", "-");
+        private static Unit match5 = new Unit("0-1", "-");
         //============================================================================
         /// <summary>
         /// "0-1" and "mm/mm" match, as both are effectively dimensionless
         /// </summary>
         //============================================================================
-        private static unit match6 = new unit("0-1", "mm/mm");
+        private static Unit match6 = new Unit("0-1", "mm/mm");
         //============================================================================
         /// <summary>
         /// "cm^3/cm^3" and "mm/mm" match, as both are effectively dimensionless
         /// </summary>
         //============================================================================
-        private static unit match7 = new unit("cm^3/cm^3", "mm/mm");
+        private static Unit match7 = new Unit("cm^3/cm^3", "mm/mm");
         //============================================================================
         /// <summary>
         /// "0-1" and "m^3/m^3" match, as both are effectively dimensionless
         /// </summary>
         //============================================================================
-        private static unit match8 = new unit("0-1", "m^3/m^3");
+        private static Unit match8 = new Unit("0-1", "m^3/m^3");
         //============================================================================
         /// <summary>
         /// "0-1" and "m^2/m^2" match, as both are effectively dimensionless
         /// </summary>
         //============================================================================
-        private static unit match9 = new unit("0-1", "m^2/m^2");
+        private static Unit match9 = new Unit("0-1", "m^2/m^2");
         //============================================================================
         /// <summary>
         /// Array of the matching units- match1, match2,...
         /// </summary>
         //============================================================================
-        private static unit[] UNITMATCHES = { match1, match2, match3, match4, match5, match6, match7, match8, match9 };
+        private static Unit[] UNITMATCHES = { match1, match2, match3, match4, match5, match6, match7, match8, match9 };
 
         private TTypedValue childTemplate;      //!<used to keep a pointer to the last element after setElementCount(0)
         /// <summary>

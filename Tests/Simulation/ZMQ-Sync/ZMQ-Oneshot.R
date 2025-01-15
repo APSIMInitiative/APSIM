@@ -56,7 +56,7 @@ testProto1 <- function() {
   
   # FIXME: should let the server find an ephemeral port, then it should tell us
   apsim$process <- process$new("/usr/bin/dotnet", args=c(
-    paste0(apsimDir, "/bin/Debug/net6.0/ApsimZMQServer.dll"), 
+    paste0(apsimDir, "/bin/Debug/net8.0/ApsimZMQServer.dll"), 
     "-p", apsim$randomPort, 
     "-P", "oneshot",
     "-a", "127.0.0.1",

@@ -36,7 +36,7 @@ The server is not included in an APSIM binary installation, and must be built fr
 
 When using the [first option](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-run), the `--` is necessary - it separates the arguments passed to the `dotnet` command from the arguments passed to the server.
 
-When using the [second syntax](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet), it's important to use the correct path to the apsim-server.dll file, as this path can be variable depending on how it was built. Typically, it will be located at `ApsimX/bin/Debug/net6.0/apsim-server.dll`, but this will be different if the server was built in release mode (path will contain Release instead of Debug), and will be different again if the project was published.
+When using the [second syntax](https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet), it's important to use the correct path to the apsim-server.dll file, as this path can be variable depending on how it was built. Typically, it will be located at `ApsimX/bin/Debug/net8.0/apsim-server.dll`, but this will be different if the server was built in release mode (path will contain Release instead of Debug), and will be different again if the project was published.
 
 ## Command Line Arguments
 

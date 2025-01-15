@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <BaseOutputPath>../bin</BaseOutputPath>
     <ApplicationIcon />
     <StartupObject />
@@ -13,8 +13,7 @@
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ServerGarbageCollection>true</ServerGarbageCollection>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	<WarningsNotAsErrors>NU1902;NU1903</WarningsNotAsErrors>
-	<SelfContained>false</SelfContained>
+    <SelfContained>false</SelfContained>
   </PropertyGroup>
   
   <PropertyGroup>

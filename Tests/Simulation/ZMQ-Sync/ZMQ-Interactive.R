@@ -17,7 +17,7 @@ testProto2 <- function() {
   cat("Listening on", get.last.endpoint(apsim$apsimSocket), "\n")
   
   apsim$process <- process$new("/usr/bin/dotnet", args=c(
-    paste0(apsimDir, "/bin/Debug/net6.0/ApsimZMQServer.dll"), 
+    paste0(apsimDir, "/bin/Debug/net8.0/ApsimZMQServer.dll"), 
     "-p", apsim$randomPort, 
     "-P", "interactive",
     "-f", paste0(apsimDir, "/Tests/Simulation/ZMQ-Sync/ZMQ-sync.apsimx")),

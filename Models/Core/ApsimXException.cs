@@ -20,8 +20,8 @@ namespace Models.Core
         }
 
         /// <summary>Initializes a new instance of the <see cref="ApsimXException"/> class.</summary>
-        protected ApsimXException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
+        [Obsolete]
+        protected ApsimXException(SerializationInfo info, StreamingContext context): base(info, context)
         { }
 
         /// <summary>Initializes a new instance of the <see cref="ApsimXException"/> class.</summary>

@@ -3,7 +3,7 @@ title: "macOS"
 draft: false
 ---
 
-APSIM can be compiled using Microsoft's [Visual Studio Code](https://code.visualstudio.com/download). A single solution file exists in the root of the repository (ApsimX.sln). Building this solution will extract all 3rd party packages from NuGet and build everything. All executables will be built to the bin folder, but the exact output location will depend on how the solution is built (ie release vs debug). The default (debug) will cause outputs to be copied to `bin/Debug/net6.0/`.
+APSIM can be compiled using Microsoft's [Visual Studio Code](https://code.visualstudio.com/download). A single solution file exists in the root of the repository (ApsimX.sln). Building this solution will extract all 3rd party packages from NuGet and build everything. All executables will be built to the bin folder, but the exact output location will depend on how the solution is built (ie release vs debug). The default (debug) will cause outputs to be copied to `bin/Debug/net8.0/`.
 
 1. Install [Visual Studio Code](https://code.visualstudio.com/download)
 
