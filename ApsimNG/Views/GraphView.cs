@@ -431,9 +431,6 @@ namespace UserInterface.Views
             if (this.LeftRightPadding != 0)
                 this.plot1.Model.Padding = new OxyThickness(10, 10, this.LeftRightPadding, 10);
 
-            foreach (OxyPlot.Axes.Axis axis in this.plot1.Model.Axes)
-                this.FormatAxisTickLabels(axis);
-
             this.plot1.Model.SetLegendFontSize(FontSize);
 
             foreach (OxyPlot.Annotations.Annotation annotation in this.plot1.Model.Annotations)
@@ -1211,15 +1208,94 @@ namespace UserInterface.Views
                 oxyAxis.AbsoluteMinimum = min;
                 oxyAxis.AbsoluteMaximum = max;
 
-                if (oxyAxis is DateTimeAxis)
+                if (oxyAxis is DateTimeAxis dateOxyAxis)
                 {
-                    DateTimeIntervalType intervalType = double.IsNaN(interval) ? DateTimeIntervalType.Auto : (DateTimeIntervalType)interval;
-                    (oxyAxis as DateTimeAxis).IntervalType = intervalType;
-                    (oxyAxis as DateTimeAxis).MinorIntervalType = intervalType - 1;
-                    (oxyAxis as DateTimeAxis).StringFormat = "dd/MM/yyyy";
+                    if (!double.IsNaN(interval))
+                    {
+                        FormatAxisGivenInterval(interval, dateOxyAxis);
+                    }
+                    else
+                    {
+                        FormatAxisWithoutInterval(dateOxyAxis);
+                    }
                 }
-                else if (!double.IsNaN(interval) && interval > 0)
-                    oxyAxis.MajorStep = interval;
+                if (oxyAxis is LinearAxis && oxyAxis is not DateTimeAxis && (oxyAxis.ActualStringFormat == null || !oxyAxis.ActualStringFormat.Contains("yyyy")))
+                {
+                    FormatLinearAxis(oxyAxis);
+                }
+            }
+        }
+
+        private static void FormatLinearAxis(OxyPlot.Axes.Axis oxyAxis)
+        {
+            // We want the axis labels to always have a leading 0 when displaying decimal places.
+            // e.g. we want 0.5 rather than .5
+
+            // Use the current culture to format the string.
+            string st = oxyAxis.ActualMajorStep.ToString(CultureInfo.InvariantCulture);
+
+            // count the number of decimal places in the above string.
+            int pos = st.IndexOfAny(".,".ToCharArray());
+            if (pos != -1)
+            {
+                int numDecimalPlaces = st.Length - pos - 1;
+                oxyAxis.StringFormat = "F" + numDecimalPlaces.ToString();
+            }
+        }
+
+        private static void FormatAxisGivenInterval(double interval, DateTimeAxis dateOxyAxis)
+        {
+            double FIVE_YEARS_IN_DAYS = 1825;
+            if (interval < 30)
+            {
+                dateOxyAxis.MinorIntervalType = DateTimeIntervalType.Days;
+                dateOxyAxis.StringFormat = "dd/MM/yyyy";
+                dateOxyAxis.MajorTickSize = 1;
+                dateOxyAxis.FontSize = 12;
+            }
+            else if (interval >= 30 && interval <= FIVE_YEARS_IN_DAYS)
+            {
+                dateOxyAxis.MinorIntervalType = DateTimeIntervalType.Months;
+                dateOxyAxis.StringFormat = "MM-yyyy";
+                dateOxyAxis.MajorTickSize = 3;
+                dateOxyAxis.FontSize = 12;
+
+            }
+            else if (interval > FIVE_YEARS_IN_DAYS)
+            {
+                dateOxyAxis.MinorIntervalType = DateTimeIntervalType.Years;
+                dateOxyAxis.StringFormat = "yyyy";
+            }
+            else dateOxyAxis.StringFormat = "dd/MM/yyyy";
+        }
+
+        private void FormatAxisWithoutInterval(DateTimeAxis dateOxyAxis)
+        {
+            int numDays = (largestDate - smallestDate).Days;
+            if (numDays < 100)
+            {
+                dateOxyAxis.IntervalType = DateTimeIntervalType.Days;
+                dateOxyAxis.StringFormat = "dd/MM/yyyy";
+                dateOxyAxis.FontSize = 12;
+            }
+            else if (numDays <= 366)
+            {
+                dateOxyAxis.IntervalType = DateTimeIntervalType.Months;
+                dateOxyAxis.StringFormat = "dd-MMM";
+                dateOxyAxis.FontSize = 12;
+
+            }
+            else if (numDays <= 720)
+            {
+                dateOxyAxis.IntervalType = DateTimeIntervalType.Months;
+                dateOxyAxis.StringFormat = "MMM-yyyy";
+                dateOxyAxis.FontSize = 12;
+
+            }
+            else
+            {
+                dateOxyAxis.IntervalType = DateTimeIntervalType.Years;
+                dateOxyAxis.StringFormat = "yyyy";
             }
         }
 
@@ -1438,79 +1514,6 @@ namespace UserInterface.Views
             return null;
         }
 
-
-        /// <summary>
-        /// Event handler for when user clicks close
-        /// </summary>
-        /// <param name="sender">Event sender</param>
-        /// <param name="e">Event arguments</param>
-        private void OnCloseEditorPanel(object sender, EventArgs e)
-        {
-            /* TBI
-            try
-            {
-                this.bottomPanel.Visible = false;
-                this.splitter.Visible = false;
-            }
-            catch (Exception err)
-            {
-                ShowError(err);
-            }
-            */
-        }
-
-        /// <summary>
-        /// Format axis tick labels so that there is a leading zero on the tick
-        /// labels when necessary.
-        /// </summary>
-        /// <param name="axis">The axis to format</param>
-        private void FormatAxisTickLabels(OxyPlot.Axes.Axis axis)
-        {
-            // axis.IntervalLength = 100;
-
-            if (axis is DateTimeAxis && (axis as DateTimeAxis).IntervalType == DateTimeIntervalType.Auto)
-            {
-                DateTimeAxis dateAxis = axis as DateTimeAxis;
-
-                int numDays = (largestDate - smallestDate).Days;
-                if (numDays < 100)
-                    dateAxis.IntervalType = DateTimeIntervalType.Days;
-                else if (numDays <= 366)
-                {
-                    dateAxis.IntervalType = DateTimeIntervalType.Months;
-                    dateAxis.StringFormat = "dd-MMM";
-                }
-                else if (numDays <= 720)
-                {
-                    dateAxis.IntervalType = DateTimeIntervalType.Months;
-                    dateAxis.StringFormat = "MMM-yyyy";
-                }
-                else
-                {
-                    dateAxis.IntervalType = DateTimeIntervalType.Years;
-                    dateAxis.StringFormat = "yyyy";
-                }
-            }
-
-            if (axis is LinearAxis &&
-                !(axis is DateTimeAxis) &&
-                (axis.ActualStringFormat == null || !axis.ActualStringFormat.Contains("yyyy")))
-            {
-                // We want the axis labels to always have a leading 0 when displaying decimal places.
-                // e.g. we want 0.5 rather than .5
-
-                // Use the current culture to format the string.
-                string st = axis.ActualMajorStep.ToString(System.Globalization.CultureInfo.InvariantCulture);
-
-                // count the number of decimal places in the above string.
-                int pos = st.IndexOfAny(".,".ToCharArray());
-                if (pos != -1)
-                {
-                    int numDecimalPlaces = st.Length - pos - 1;
-                    axis.StringFormat = "F" + numDecimalPlaces.ToString();
-                }
-            }
-        }
 
         /// <summary>
         /// Populate the specified DataPointSeries with data from the data table.
