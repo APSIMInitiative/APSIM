@@ -9,6 +9,7 @@ using Models.Core.Attributes;
 using System.IO;
 using APSIM.Shared.Utilities;
 using Models.CLEM.Reporting;
+using Models.CLEM.Groupings;
 
 namespace Models.CLEM.Activities
 {
@@ -146,7 +147,22 @@ namespace Models.CLEM.Activities
 
             isStandAloneModel = true;
 
-            this.InitialiseHerd(true, false);
+            // add ruminant activity filter group to ensure correct individuals are selected
+            RuminantActivityGroup herdGroup = new()
+            {
+                Name = $"Filter_{RuminantTypeName}"
+            };
+            herdGroup.Children.Add(
+                new FilterByProperty()
+                {
+                    PropertyOfIndividual = "HerdName",
+                    Operator = System.Linq.Expressions.ExpressionType.Equal,
+                    Value = RuminantTypeName
+                }
+            );
+            this.Children.Add(herdGroup);
+
+            this.InitialiseHerd(false, false);
 
             // if no settings have been provided from parent set limiter to 1.0. i.e. no limitation
             if (MathUtilities.FloatsAreEqual(GrazingCompetitionLimiter, 0))

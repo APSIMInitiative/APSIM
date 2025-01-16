@@ -57,7 +57,7 @@ namespace Models.CLEM.Activities
         protected private RuminantHerd HerdResource { get; set; }
 
         /// <summary>
-        /// Method to get the set herd filters and perform checks
+        /// Required method setup herd details, get the set herd filters, and perform checks used during initialisation of ruminant activities
         /// </summary>
         public void InitialiseHerd(bool allowMultipleBreeds, bool allowMultipleHerds)
         {
@@ -79,12 +79,12 @@ namespace Models.CLEM.Activities
             {
                 var filtergroup = current.Children.OfType<RuminantActivityGroup>();
                 if(filtergroup.Count() > 1)
-                    Summary.WriteMessage(this, "Multiple [f=RuminantActivityGroups] have been supplied for [a=" + current.Name +"]"+ Environment.NewLine + ". Only the first [f=RuminantActivityGroup] will be used.", MessageType.Warning);
+                    Summary.WriteMessage(this, "Multiple [f=RuminantActivityGroups] have been supplied as children of [a=" + current.Name +"]"+ Environment.NewLine + ". Only the first [f=RuminantActivityGroup] will be used.", MessageType.Warning);
 
                 if (filtergroup.FirstOrDefault() != null)
                     HerdFilters.Insert(0, filtergroup.FirstOrDefault());
 
-                current = current.Parent as IModel;
+                current = current.Parent;
             }
         }
 
@@ -94,22 +94,23 @@ namespace Models.CLEM.Activities
         /// <typeparam name="T">The type of individuals to return</typeparam>
         /// <param name="herdStyle">Overall style of individuals selected. Default NotForSale</param>
         /// <param name="excludeFlags">A list of HerdChangeReasons to exclude individuals matching flag. Default null</param>
-        /// <param name="predictedBreedOnly">Flag to only return the single predicted breed for this activity. Default is true</param>
         /// <param name="includeCheckHerdMeetsCriteria">Perform check and report issues. Only expected once per activity or if herd changing. Default false</param>
         /// <param name="individualsToConsider">Provides the base herd to use instead of the default CurrentHerd object</param>
         /// <returns>A list of individuals in the herd</returns>
-        protected private IEnumerable<T> GetIndividuals<T>(GetRuminantHerdSelectionStyle herdStyle = GetRuminantHerdSelectionStyle.NotMarkedForSale, List<HerdChangeReason> excludeFlags = null, bool predictedBreedOnly = true, bool includeCheckHerdMeetsCriteria = false, List<Ruminant> individualsToConsider = null) where T: Ruminant
+        protected private IEnumerable<T> GetIndividuals<T>(GetRuminantHerdSelectionStyle herdStyle = GetRuminantHerdSelectionStyle.NotMarkedForSale, List<HerdChangeReason> excludeFlags = null, bool includeCheckHerdMeetsCriteria = false, List<Ruminant> individualsToConsider = null) where T: Ruminant
         {
-            if(herdStyle == GetRuminantHerdSelectionStyle.ForPurchase)
-                return HerdResource.PurchaseIndividuals.OfType<T>().Where(a => !predictedBreedOnly || a.Breed == PredictedHerdBreed);
+            if (herdStyle == GetRuminantHerdSelectionStyle.ForPurchase)
+                return HerdResource.PurchaseIndividuals.OfType<T>().Where(a => (allowMultipleBreeds || a.Breed == PredictedHerdBreed) & (allowMultipleHerds || a.HerdName == PredictedHerdName));
             else
             {
                 bool readyForSale = herdStyle == GetRuminantHerdSelectionStyle.MarkedForSale;
-                if(individualsToConsider is null)
-                    return CurrentHerd(includeCheckHerdMeetsCriteria).OfType<T>().Where(a => (!predictedBreedOnly || a.Breed == PredictedHerdBreed) && (herdStyle == GetRuminantHerdSelectionStyle.AllOnFarm || a.ReadyForSale == readyForSale) && (excludeFlags is null || !excludeFlags.Contains(a.SaleFlag)));
+                if (individualsToConsider is null)
+                {
+                    return CurrentHerd(includeCheckHerdMeetsCriteria).OfType<T>().Where(a => ((allowMultipleBreeds || a.Breed == PredictedHerdBreed) & (allowMultipleHerds || a.HerdName == PredictedHerdName)) && (herdStyle == GetRuminantHerdSelectionStyle.AllOnFarm || a.ReadyForSale == readyForSale) && (excludeFlags is null || !excludeFlags.Contains(a.SaleFlag)));
+                }
                 else
                 {
-                    return individualsToConsider.OfType<T>().Where(a => (!predictedBreedOnly || a.Breed == PredictedHerdBreed) && (herdStyle == GetRuminantHerdSelectionStyle.AllOnFarm || a.ReadyForSale == readyForSale) && (excludeFlags is null || !excludeFlags.Contains(a.SaleFlag)));
+                    return individualsToConsider.OfType<T>().Where(a => ((allowMultipleBreeds || a.Breed == PredictedHerdBreed) & (allowMultipleHerds || a.HerdName == PredictedHerdName)) && (herdStyle == GetRuminantHerdSelectionStyle.AllOnFarm || a.ReadyForSale == readyForSale) && (excludeFlags is null || !excludeFlags.Contains(a.SaleFlag)));
                 }
             }
         }
@@ -128,10 +129,10 @@ namespace Models.CLEM.Activities
                 return herd;
             }
             // check that no filters will filter all groups otherwise return all 
-            // account for any sorting or reduced takes
             var emptyfilters = filters.Where(a => a.FindAllChildren<Filter>().Any() == false);
             if (emptyfilters.Any())
             {
+                // account for any sorting or reduced takes
                 foreach (var empty in emptyfilters.Where(a => a.FindAllChildren<ISort>().Any() || a.FindAllChildren<TakeFromFiltered>().Any()))
                     herd = empty.Filter(herd);
                 return herd;
@@ -180,6 +181,10 @@ namespace Models.CLEM.Activities
         /// </summary>
         private void DetermineHerdName()
         {
+            // This approach currently assumes the herd is defined in initial cohorts or the activity filter groups provided.
+            // Any multiple herd or breed conflicts will only be reported here based on initial herd and the requirements of the activity.
+            // There are no subsequent checks for multiple breed or herd as the herd is accessed by activities unless check herd is selected in CurrentHerd method.
+
             PredictedHerdBreed = "N/A";
             PredictedHerdName = "N/A";
 
@@ -189,22 +194,24 @@ namespace Models.CLEM.Activities
             // check for multiple breeds
             if (herd.Select(a => a.Breed).Distinct().Skip(1).Any())
             {
-                multipleHerds = true;
                 if (!allowMultipleBreeds)
-                    throw new ApsimXException(this, $"Multiple breeds were detected in current herd for [a={this.Name}]{Environment.NewLine}Use a Ruminant Filter Group to specify a single breed for this activity.");
+                    throw new ApsimXException(this, $"Multiple breeds were detected in current herd for [a={this.Name}]{Environment.NewLine}Ensure a Ruminant Activity Group defines a single breed for this activity.");
                 PredictedHerdBreed = "Multiple";
             }
             if (herd.Select(a => a.HerdName).Distinct().Skip(1).Any())
             {
                 if (!allowMultipleHerds)
-                    throw new ApsimXException(this, $"Multiple herd names were detected in current herd for [a={this.Name}]{Environment.NewLine}Use a Ruminant Filter Group to specify a single herd for this activity.");
+                    throw new ApsimXException(this, $"Multiple herd names were detected in current herd for [a={this.Name}]{Environment.NewLine}Use a Ruminant Activity Group to specify a single herd for this activity.");
                 PredictedHerdName = "Multiple";
+                multipleHerds = true;
             }
 
             if (herd.Any())
             {
-                PredictedHerdBreed = herd.FirstOrDefault().Breed;
-                PredictedHerdName = herd.FirstOrDefault().HerdName;
+                if (PredictedHerdBreed != "Multiple")
+                    PredictedHerdBreed = herd.FirstOrDefault().Breed;
+                if (PredictedHerdName != "Multiple")
+                    PredictedHerdName = herd.FirstOrDefault().HerdName;
             }
             else
             {

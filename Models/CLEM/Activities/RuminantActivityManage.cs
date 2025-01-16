@@ -861,7 +861,7 @@ namespace Models.CLEM.Activities
                 switch (valueToSupply.Key.identifier)
                 {
                     case "Herd size - before activity":
-                        number = GetIndividuals<Ruminant>(GetRuminantHerdSelectionStyle.AllOnFarm, predictedBreedOnly: true).Count();
+                        number = GetIndividuals<Ruminant>(GetRuminantHerdSelectionStyle.AllOnFarm).Count();
                         break;
                     case "Adjust - new grow out males":
                         if (GrowOutYoungMales)

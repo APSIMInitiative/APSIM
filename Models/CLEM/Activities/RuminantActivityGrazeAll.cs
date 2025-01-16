@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using Models.Core.Attributes;
 using System.IO;
 using Models.Core.ApsimFile;
+using Models.CLEM.Groupings;
+using System.Linq.Expressions;
 
 namespace Models.CLEM.Activities
 {
@@ -103,7 +105,25 @@ namespace Models.CLEM.Activities
                         if (grazePastureHerd.Clock == null)
                             grazePastureHerd.Clock = this.clock;
 
-                        grazePastureHerd.InitialiseHerd(true, true);
+                        // add ruminant activity filter group to ensure correct individuals are selected
+                        RuminantActivityGroup herdGroup = new ()
+                        {
+                            Name = "Filter_" + grazePastureHerd.Name,
+                            Parent = this
+                        };
+                        herdGroup.Children.Add(
+                            new FilterByProperty()
+                            {
+                                PropertyOfIndividual = "HerdName",
+                                Operator = ExpressionType.Equal,
+                                Value = herdType.Name,
+                                Parent = herdGroup
+                            } 
+                        );
+                        grazePastureHerd.Children.Add(herdGroup);
+                        grazePastureHerd.FindChild<RuminantActivityGroup>().InitialiseFilters();
+
+                        grazePastureHerd.InitialiseHerd(false, false);
                         grazePasture.Children.Add(grazePastureHerd);
                     }
                     Structure.Add(grazePasture, this);
