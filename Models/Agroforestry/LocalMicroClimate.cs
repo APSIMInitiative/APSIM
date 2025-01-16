@@ -87,7 +87,7 @@ namespace Models.Agroforestry
         public double Wind { get { return weather.Wind * ParentSystem.GetWindReduction(Parent as Zone); } set { weather.Wind = value; } }
 
         /// <summary>
-        /// Gets or sets the CO2 level. If not specified in the weather file the default is 350.
+        /// Gets or sets the CO2 level. If not specified in the weather file the default is WeatherConstants.DEFAULT_CO2.
         /// </summary>
         [JsonIgnore]
         public double CO2 { get { return weather.CO2; } set { weather.CO2 = value; } }

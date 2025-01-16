@@ -269,10 +269,10 @@ namespace Models.PMF.Organs
         public double Albedo { get; set; }
 
         /// <summary>
-        /// Maximum stomatal conductance at CO2 concentration of 350 ppm (m/s).
+        /// Maximum stomatal conductance at CO2 concentration of WeatherConstants.DEFAULT_CO2 ppm (m/s).
         /// </summary>
         [Units("m/s")]
-        [Description("Maximum stomatal conductance at CO2 concentration of 350 ppm")]
+        [Description("Maximum stomatal conductance at CO2 concentration of 420 ppm")]
         public double Gsmax350 { get; set; }
 
         /// <summary>

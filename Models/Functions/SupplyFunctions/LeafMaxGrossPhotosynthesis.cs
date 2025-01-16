@@ -1,4 +1,5 @@
 ﻿using System;
+using Models.Climate;
 using Models.Core;
 
 namespace Models.Functions.SupplyFunctions
@@ -42,7 +43,7 @@ namespace Models.Functions.SupplyFunctions
 
             //------------------------------------------------------------------------
             //Efect of CO2 concentration of the air
-            if (CO2 < 0.0) CO2 = 350;
+            if (CO2 < 0.0) CO2 = WeatherConstants.DEFAULT_CO2;
 
             //Check wheather a C3 or C4 crop
             if (pathway == "C3")   //C3 plants

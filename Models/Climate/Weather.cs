@@ -116,7 +116,7 @@ namespace Models.Climate
         private LinkedList<WeatherRecordEntry> weatherCache = new LinkedList<WeatherRecordEntry>();
 
         /// <summary>
-        /// Stores the CO2 value from either the default 350 or from a column in met file. Public property can then also check
+        /// Stores the CO2 value from either the default WeatherConstants.DEFAULT_CO2 or from a column in met file. Public property can then also check
         /// if this value was supplied by a constant
         /// </summary>
         [JsonIgnore]
@@ -359,7 +359,7 @@ namespace Models.Climate
         public double DayLength { get; set; }
 
         /// <summary>
-        /// Gets or sets the CO2 level. If not specified in the weather file the default is 350.
+        /// Gets or sets the CO2 level. If not specified in the weather file the default is WeatherConstants.DEFAULT_CO2.
         /// </summary>
         [JsonIgnore]
         public double CO2 {
@@ -828,7 +828,7 @@ namespace Models.Climate
                 readMetData.Wind = Convert.ToSingle(readMetData.Raw[this.windIndex], CultureInfo.InvariantCulture);
 
             if (co2Index == -1)
-                readMetData.CO2 = 350;
+                readMetData.CO2 = WeatherConstants.DEFAULT_CO2;
             else
                 readMetData.CO2 = Convert.ToDouble(readMetData.Raw[co2Index], CultureInfo.InvariantCulture);
 

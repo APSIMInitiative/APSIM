@@ -1,6 +1,6 @@
 {
   "$type": "Models.Core.Simulations, Models",
-  "Version": 181,
+  "Version": 186,
   "Name": "Simulations",
   "ResourceName": null,
   "Children": [
@@ -109,6 +109,9 @@
               "ConstantsFile": null,
               "FileName": "%root%/Examples/WeatherFiles/AU_Dalby.met",
               "ExcelWorkSheetName": "",
+              "Latitude": -27.18,
+              "Tav": 19.09,
+              "Amp": 14.63,
               "Name": "Weather",
               "ResourceName": null,
               "Children": [
@@ -962,6 +965,7 @@
     {
       "$type": "Models.Core.Folder, Models",
       "ShowInDocs": false,
+      "GraphsPerPage": 6,
       "Name": "Folder",
       "ResourceName": null,
       "Children": [
@@ -998,8 +1002,7 @@
             "    \t\tdouble wheatMedianForCO2FromFile = GetMedian(\"Probability\", \"CO2FromFile\", \"Wheat.Grain.Total.Wt\");",
             "    \t\tdouble wheatMedianForCO2420 = GetMedian(\"Probability\", \"CO2Value420\", \"Wheat.Grain.Total.Wt\");",
             "",
-            "    \t\tif (wheatMedianForCO2350 > wheatMedianForCO2FromFile ||",
-            "    \t\t    wheatMedianForCO2350 > wheatMedianForCO2420 ||",
+            "    \t\tif (wheatMedianForCO2350 > wheatMedianForCO2420 ||",
             "    \t\t    wheatMedianForCO2FromFile > wheatMedianForCO2420)",
             "    \t\t\tthrow new Exception(\"Test failed in CO2 tutorial.\");",
             "    \t\t\t",

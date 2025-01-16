@@ -1,4 +1,5 @@
 ﻿using System;
+using Models.Climate;
 using Models.Core;
 using Models.Interfaces;
 
@@ -57,14 +58,14 @@ namespace Models.Functions.SupplyFunctions
                     throw new Exception("Average daily temperature too high for RUE CO2 Function");
                 if (MetData.CO2 <= CP)
                     throw new Exception("Daily C02 concentrations are below compensation point");
-                else if (MetData.CO2 == 350)
+                else if (MetData.CO2 == WeatherConstants.DEFAULT_CO2)
                     return 1.0;
                 else
                 {
                     double first;
                     double second;
-                    first = (MetData.CO2 - CP) * (350.0 + 2.0 * CP);
-                    second = (MetData.CO2 + 2.0 * CP) * (350.0 - CP);
+                    first = (MetData.CO2 - CP) * (WeatherConstants.DEFAULT_CO2 + 2.0 * CP);
+                    second = (MetData.CO2 + 2.0 * CP) * (WeatherConstants.DEFAULT_CO2 - CP);
                     return first / second;
                 }
             }

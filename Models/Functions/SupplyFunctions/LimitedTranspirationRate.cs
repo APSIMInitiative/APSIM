@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using APSIM.Shared.Utilities;
+using Models.Climate;
 using Models.Core;
 using Models.Interfaces;
 using Models.PMF;
@@ -825,7 +826,7 @@ namespace Models.Functions.SupplyFunctions
             double CO2PhotoCmp0, CO2PhotoCmp, EffPAR;
 
             //Efect of CO2 concentration
-            if (fCO2 < 0.0) fCO2 = 350;
+            if (fCO2 < 0.0) fCO2 = WeatherConstants.DEFAULT_CO2;
 
             //Check wheather a C3 or C4 crop
             if (Pathway == "C3")   //C3 plants
@@ -871,7 +872,7 @@ namespace Models.Functions.SupplyFunctions
 
             //------------------------------------------------------------------------
             //Efect of CO2 concentration of the air
-            if (CO2 < 0.0) CO2 = 350;
+            if (CO2 < 0.0) CO2 = WeatherConstants.DEFAULT_CO2;
 
             //Check wheather a C3 or C4 crop
             if (Pathway == "C3")   //C3 plants

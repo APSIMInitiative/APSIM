@@ -171,7 +171,7 @@ namespace Models.Climate
         [JsonIgnore]
         public double Wind { get; set; }
 
-        /// <summary>CO2 level. If not specified in the weather file the default is 350.</summary>
+        /// <summary>CO2 level. If not specified in the weather file the default is WeatherConstants.DEFAULT_CO2.</summary>
         [Units("ppm")]
         [JsonIgnore]
         public double CO2 { get; set; }
@@ -254,7 +254,7 @@ namespace Models.Climate
                 if (file.Constant("CO2") != null)
                     CO2 = Convert.ToDouble(file.Constant("CO2").Value);
                 else
-                    CO2 = 350;
+                    CO2 = WeatherConstants.DEFAULT_CO2;
             }
             finally
             {

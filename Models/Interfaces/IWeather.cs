@@ -1,12 +1,12 @@
-﻿using System;
-using Models.Core;
+﻿using Models.Core;
+using System;
 
 namespace Models.Interfaces
 {
-
     /// <summary>A weather interface.</summary>
     public interface IWeather
     {
+
         /// <summary>Start date of the weather file.</summary>
         DateTime StartDate { get; }
 
@@ -125,7 +125,7 @@ namespace Models.Interfaces
         /// <summary> Gets or sets the wind value found in weather file or zero if not specified. /// </summary>
         public double Wind { get; set; }
 
-        /// <summary> Gets or sets the CO2 level. If not specified in the weather file the default is 350. </summary>
+        /// <summary> Gets or sets the CO2 level. If not specified in the weather file the default is WeatherConstants.DEFAULT_CO2. </summary>
         public double RainfallHours { get; set; }
 
         /// <summary> Gets or sets the atmospheric air pressure. If not specified in the weather file the default is 1010 hPa. </summary>
