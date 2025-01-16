@@ -35,11 +35,20 @@ namespace UserInterface.Presenters
 
         private async void PopulateView()
         {  
-            //Default text while loading
-            view.Text = InitialView(model);
+            try
+            {
+                //Default text while loading
+                view.Text = InitialView(model);
 
-            //Desynced loading of reflection details (this can take a few seconds, so we desync it from the GUI so it's not laggy)
-            view.Text = await Task.Run(() => DocumentModel(model).Replace("<", @"\<"));
+                //Desynced loading of reflection details (this can take a few seconds, so we desync it from the GUI so it's not laggy)
+                view.Text = await Task.Run(() => DocumentModel(model).Replace("<", @"\<"));
+                
+            }
+            catch(Exception e)
+            {
+                presenter.MainPresenter.ShowError($"Unable to show markdown for this model. Reason: {Environment.NewLine}{e}");
+            }
+
         }
 
         private string InitialView(IModel model)
