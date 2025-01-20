@@ -3,6 +3,7 @@ using Models.Core;
 using Models.Interfaces;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Models.Climate
 {
@@ -57,7 +58,13 @@ namespace Models.Climate
         /// </summary>
         [Units("°C")]
         [JsonIgnore]
-        public double MeanT { get { return (MaxT + MinT) / 2; } }
+        public double MeanT { get { return MathUtilities.Average(SubDailyTemperature); } }
+
+        /// <summary>
+        /// Hourly temperature values assuming t = Tmin when dark and t=Tmax when light (oC)
+        /// </summary>
+        [JsonIgnore]
+        public double[] SubDailyTemperature = null;
 
         /// <summary>
         /// Daily mean VPD (hPa)
@@ -187,6 +194,13 @@ namespace Models.Climate
         public double SunRise { get; set; }
 
         /// <summary>
+        /// Number of hours after sun up we switch from Min to Max temp.
+        /// </summary>
+        [Description("Hours after sunrise to switch from Min to Max temp")]
+
+        public double TempLag { get; set; } = 0;
+
+        /// <summary>
         /// Calculate daylength using a given twilight angle
         /// </summary>
         public double CalculateSunRise()
@@ -197,8 +211,8 @@ namespace Models.Climate
         /// <summary>
         /// Gets the duration of the day in hours.
         /// </summary>
-        [Description("The hour of the day for sunset")]
-        public double SunSet { get; set; }
+        [JsonIgnore]
+        public double SunSet { get { return SunRise + DayLength; }}
 
         /// <summary>
         /// Calculate daylength using a given twilight angle
@@ -223,6 +237,7 @@ namespace Models.Climate
         [EventSubscribe("DoWeather")]
         private void OnDoWeather(object sender, EventArgs e)
         {
+            calculateHourlyTemperature();
             if (this.PreparingNewWeatherData != null)
                 this.PreparingNewWeatherData.Invoke(this, new EventArgs());
             YesterdaysMetData = new DailyMetDataFromFile();
@@ -233,6 +248,26 @@ namespace Models.Climate
             YesterdaysMetData.VP = VP;
             YesterdaysMetData.PanEvap = PanEvap;
             TomorrowsMetData = YesterdaysMetData;
+        }
+
+        /// <summary>Called when a simulation commences.</summary>
+        /// <param name="sender">The sender of the event</param>
+        /// <param name="e">The event data.</param>
+        [EventSubscribe("Commencing")]
+        private void OnSimulationCommencing(object sender, EventArgs e)
+        {
+            SubDailyTemperature = new double[24];
+        }
+
+        private void calculateHourlyTemperature()
+        {
+            for (int i = 0; i < SubDailyTemperature.Length; i++)
+            {
+                if ((i <= SunRise+TempLag) || (i > SunSet))
+                    SubDailyTemperature[i] = MinT;
+                else
+                    SubDailyTemperature[i] = MaxT;
+            }
         }
 
         /// <summary>Met Data from yesterday</summary>

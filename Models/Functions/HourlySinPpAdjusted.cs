@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
+using Models.Climate;
 using Models.Core;
 using Models.Interfaces;
 using Newtonsoft.Json;
@@ -15,6 +18,7 @@ namespace Models.Functions
     /// to the Tmin at sunrise the next day.
     /// The hour (Th) of sunrise is calculated as Th = 12 − d/2 and Ta is assumed 
     /// to equal Tmin at this time.  Tmax is reached when Th equals 13.5. 
+    /// If Controled Environment module is used for Weather it takes hourly data from that instead of the above calculation.
     /// </summary>
     [Serializable]
     [Description("calculating the hourly temperature based on Tmax, Tmin and daylength")]
@@ -25,6 +29,10 @@ namespace Models.Functions
         /// <summary>The met data</summary>
         [Link]
         protected IWeather MetData = null;
+
+        /// <summary>Link to controled environment if it exisits.  Thus uses CE hourly data instead of the extrapolation used here</summary>
+        [Link(IsOptional = true)]
+        protected ControlledEnvironment CE = null;
 
         private const double P = 1.5;
 
@@ -53,59 +61,66 @@ namespace Models.Functions
         /// <returns></returns>
         public List<double> SubDailyValues()
         {
-            double d = MetData.CalculateDayLength(-6);
-            double Tmin = MetData.MinT;
-            double Tmax = MetData.MaxT;
-            double TmaxB = (MetData.YesterdaysMetData == null) ? MetData.MaxT : MetData.YesterdaysMetData.MaxT;
-            double TminA = (MetData.TomorrowsMetData == null) ? MetData.MinT : MetData.TomorrowsMetData.MinT;
-            double Hsrise = MetData.CalculateSunRise();
-            double Hsset = MetData.CalculateSunSet();
-
-            List<double> sdts = new List<double>();
-
-            for (int Th = 0; Th <= 23; Th++)
+            if (CE != null)
             {
-                double Ta = 1.0;
-                if (Th < Hsrise)
-                {
-                    //  Hour between midnight and sunrise
-                    //  PERIOD A MaxTB is max. temperature, before day considered
-
-                    //this is the sunset temperature of based on the previous day
-                    double n = 24 - d;
-                    Tsset = Tmin + (TmaxB - Tmin) *
-                                    Math.Sin(Math.PI * (d / (d + 2 * P)));
-
-                    Ta = (Tmin - Tsset * Math.Exp(-n / TC) +
-                            (Tsset - Tmin) * Math.Exp(-(Th + 24 - Hsset) / TC)) /
-                            (1 - Math.Exp(-n / TC));
-                }
-                else if (Th >= Hsrise & Th < 12 + P)
-                {
-                    // PERIOD B Hour between sunrise and normal time of MaxT
-                    Ta = Tmin + (Tmax - Tmin) *
-                            Math.Sin(Math.PI * (Th - Hsrise) / (d + 2 * P));
-                }
-                else if (Th >= 12 + P & Th < Hsset)
-                {
-                    // PERIOD C Hour between normal time of MaxT and sunset
-                    //  MinTA is min. temperature, after day considered
-
-                    Ta = TminA + (Tmax - TminA) *
-                        Math.Sin(Math.PI * (Th - Hsrise) / (d + 2 * P));
-                }
-                else
-                {
-                    // PERIOD D Hour between sunset and midnight
-                    Tsset = TminA + (Tmax - TminA) * Math.Sin(Math.PI * (d / (d + 2 * P)));
-                    double n = 24 - d;
-                    Ta = (TminA - Tsset * Math.Exp(-n / TC) +
-                            (Tsset - TminA) * Math.Exp(-(Th - Hsset) / TC)) /
-                            (1 - Math.Exp(-n / TC));
-                }
-                sdts.Add(Ta);
+                return CE.SubDailyTemperature.ToList();
             }
-            return sdts;
+            else
+            {
+                double d = MetData.CalculateDayLength(-6);
+                double Tmin = MetData.MinT;
+                double Tmax = MetData.MaxT;
+                double TmaxB = (MetData.YesterdaysMetData == null) ? MetData.MaxT : MetData.YesterdaysMetData.MaxT;
+                double TminA = (MetData.TomorrowsMetData == null) ? MetData.MinT : MetData.TomorrowsMetData.MinT;
+                double Hsrise = MetData.CalculateSunRise();
+                double Hsset = MetData.CalculateSunSet();
+
+                List<double> sdts = new List<double>();
+
+                for (int Th = 0; Th <= 23; Th++)
+                {
+                    double Ta = 1.0;
+                    if (Th < Hsrise)
+                    {
+                        //  Hour between midnight and sunrise
+                        //  PERIOD A MaxTB is max. temperature, before day considered
+
+                        //this is the sunset temperature of based on the previous day
+                        double n = 24 - d;
+                        Tsset = Tmin + (TmaxB - Tmin) *
+                                        Math.Sin(Math.PI * (d / (d + 2 * P)));
+
+                        Ta = (Tmin - Tsset * Math.Exp(-n / TC) +
+                                (Tsset - Tmin) * Math.Exp(-(Th + 24 - Hsset) / TC)) /
+                                (1 - Math.Exp(-n / TC));
+                    }
+                    else if (Th >= Hsrise & Th < 12 + P)
+                    {
+                        // PERIOD B Hour between sunrise and normal time of MaxT
+                        Ta = Tmin + (Tmax - Tmin) *
+                                Math.Sin(Math.PI * (Th - Hsrise) / (d + 2 * P));
+                    }
+                    else if (Th >= 12 + P & Th < Hsset)
+                    {
+                        // PERIOD C Hour between normal time of MaxT and sunset
+                        //  MinTA is min. temperature, after day considered
+
+                        Ta = TminA + (Tmax - TminA) *
+                            Math.Sin(Math.PI * (Th - Hsrise) / (d + 2 * P));
+                    }
+                    else
+                    {
+                        // PERIOD D Hour between sunset and midnight
+                        Tsset = TminA + (Tmax - TminA) * Math.Sin(Math.PI * (d / (d + 2 * P)));
+                        double n = 24 - d;
+                        Ta = (TminA - Tsset * Math.Exp(-n / TC) +
+                                (Tsset - TminA) * Math.Exp(-(Th - Hsset) / TC)) /
+                                (1 - Math.Exp(-n / TC));
+                    }
+                    sdts.Add(Ta);
+                }
+                return sdts;
+            }
         }
     }
 
